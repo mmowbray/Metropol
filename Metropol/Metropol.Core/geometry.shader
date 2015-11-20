@@ -1,14 +1,19 @@
 #version 330 
 
 layout(points) in;
-layout(points, max_vertices = 3) out;
+layout(triangle_strip, max_vertices = 3) out;
 
 void main()
 {
-	for (int i = 0; i<3; i++)
-	{
-		gl_Position = gl_in[i].gl_Position;
-		EmitVertex();
-	}
+
+	gl_Position = gl_in[0].gl_Position + vec4(-0.1, 0.0, 0.0, 0.0);
+	EmitVertex();
+
+	gl_Position = gl_in[0].gl_Position + vec4(0.1, 7.0, 3.0, 0.0);
+	EmitVertex();
+
+	gl_Position = gl_in[0].gl_Position + vec4(0.1, -20.0, -2.0, 0.0);
+	EmitVertex();
+	
 	EndPrimitive();
 }
