@@ -1,20 +1,24 @@
 #version 330 
 
 layout(points) in;
-layout(triangle_strip, max_vertices = 3) out;
+layout(triangle_strip, max_vertices = 30) out;
 
 void create_voxel(vec4 center) 
 {
-	gl_Position = center + vec4(-0.1, 0.0, 0.0, 0.0);
+	gl_Position = center + vec4(-1.0,0.0, -1.0, 0.0);
 	EmitVertex();
 
-	gl_Position = center + vec4(0.1, 7.0, 3.0, 0.0);
+	gl_Position = center + vec4(-1.0, 0.0, -1.0, 0.0);
 	EmitVertex();
 
-	gl_Position = center + vec4(0.1, -20.0, -2.0, 0.0);
+	gl_Position = center + vec4(-1.0, 80.0, 1.0, 0.0);
+	EmitVertex();
+
+	gl_Position = center + vec4(1.0, 0.0, -1.0, 0.0);
 	EmitVertex();
 
 	EndPrimitive();
+
 }
 
 void main()

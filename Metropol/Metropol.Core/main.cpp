@@ -60,10 +60,10 @@ void cursorMoved(GLFWwindow* window, double xpos, double ypos) {
 	if ((glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) && (ypos != old_mouse_y_pos)) { //dragging up or down
 
 		if (ypos > old_mouse_y_pos) {
-			camera_position.z += 1.0f;
+			camera_position.z += 10.0f;
 		}
 		else {
-			camera_position.z -= 1.0f;
+			camera_position.z -= 10.0f;
 		}
 
 		camera_position.z = max(camera_position.z, 1.0f); //clamp the camera position
@@ -126,7 +126,7 @@ bool initialize() {
 	glDepthFunc(GL_LESS);	/// The type of testing i.e. a smaller value as "closer"
 
 							//setup other variables
-	camera_position = glm::vec3(0.0f, 10.0f, 1.0f);
+	camera_position = glm::vec3(0.0f, 10.0f, 12.0f);
 
 	proj_matrix = glm::perspective(45.0f, 1280.0f / 720.0f, 0.1f, 100.0f);
 
