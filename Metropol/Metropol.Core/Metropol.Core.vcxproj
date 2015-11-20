@@ -24,7 +24,7 @@
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
     <ProjectName>Metropol.Core</ProjectName>
   </PropertyGroup>
-   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
@@ -105,7 +105,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-	  <AdditionalIncludeDirectories>..\cimg;..\glm\gtx;..\glm\gtc;..\glm\detail;..\glm;..\glfw;..\glew;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\cimg;..\glm\gtx;..\glm\gtc;..\glm\detail;..\glm;..\glfw;..\glew;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -142,7 +142,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-	  <AdditionalIncludeDirectories>..\cimg;..\glm\gtx;..\glm\gtc;..\glm\detail;..\glm;..\glfw;..\glew;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\cimg;..\glm\gtx;..\glm\gtc;..\glm\detail;..\glm;..\glfw;..\glew;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -166,6 +166,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="fragment.shader" />
+    <None Include="geometry.shader" />
     <None Include="vertex.shader" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

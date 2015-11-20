@@ -1,11 +1,11 @@
 /**
-	Metropol - COMP 371 Fall 2015 Project
-	main.cpp
-	Purpose: Entry point of application.
+Metropol - COMP 371 Fall 2015 Project
+main.cpp
+Purpose: Entry point of application.
 
-	@author Patrick Soueida
-	@author Maxwell Mowbray
-	@version M0.1
+@author Patrick Soueida
+@author Maxwell Mowbray
+@version M0.1
 */
 
 #include "stdafx.h"
@@ -37,12 +37,12 @@ GLuint shader_programme = 0;
 
 GLuint vao = 0, terrain_vertices_vbo = 0, terrain_indices_vbo = 0;
 
-GLuint model_matrix_id = 0; 
+GLuint model_matrix_id = 0;
 GLuint view_matrix_id = 0;
 GLuint proj_matrix_id = 0;
 
 glm::mat4 model_matrix;
-glm::mat4 proj_matrix; 
+glm::mat4 proj_matrix;
 glm::mat4 view_matrix;
 
 //camera position vector
@@ -50,9 +50,9 @@ glm::vec3 camera_position;
 float old_mouse_y_pos;
 
 /**
-	Reacts to mouse scrollwheel input.
+Reacts to mouse scrollwheel input.
 
-	@return void.
+@return void.
 */
 
 void cursorMoved(GLFWwindow* window, double xpos, double ypos) {
@@ -73,23 +73,23 @@ void cursorMoved(GLFWwindow* window, double xpos, double ypos) {
 }
 
 /**
-	Updates the vieport and perspective matrix when the window is resized.
+Updates the vieport and perspective matrix when the window is resized.
 
-	@return void.
+@return void.
 */
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
 	glViewport(0, 0, width, height); //update the viewport on window resize
 
-	// Update the Projection matrix after a window resize event
+									 // Update the Projection matrix after a window resize event
 	proj_matrix = glm::perspective(45.0f, (float)width / (float)height, 0.1f, 100.0f);
 }
 
 /**
-	Loads GLFW and GLEW.
+Loads GLFW and GLEW.
 
-	@return a boolean representing whether or not there was an erorr during initialization.
+@return a boolean representing whether or not there was an erorr during initialization.
 */
 
 bool initialize() {
@@ -125,7 +125,7 @@ bool initialize() {
 	glEnable(GL_DEPTH_TEST); /// Enable depth-testing
 	glDepthFunc(GL_LESS);	/// The type of testing i.e. a smaller value as "closer"
 
-	//setup other variables
+							//setup other variables
 	camera_position = glm::vec3(0.0f, 10.0f, 1.0f);
 
 	proj_matrix = glm::perspective(45.0f, 1280.0f / 720.0f, 0.1f, 100.0f);
@@ -134,13 +134,13 @@ bool initialize() {
 }
 
 /**
-	Frees up memory before the program terminates.
+Frees up memory before the program terminates.
 
-	@return void.
+@return void.
 */
 
 void cleanUp() {
-	
+
 	//Release VAO/VBO memory
 	glDeleteProgram(shader_programme);
 	glDeleteBuffers(1, &terrain_vertices_vbo);
@@ -152,17 +152,18 @@ void cleanUp() {
 }
 
 /**
-	Loads the vertex and fragments shaders from text files and creates an OpenGL Programme.
+Loads the vertex and fragments shaders from text files and creates an OpenGL Programme.
 
-	@param the path of the vertex shader.
-	@param the path of the fragment shader.
-	@return the OpenGL Programme ID to be used.
+@param the path of the vertex shader.
+@param the path of the fragment shader.
+@return the OpenGL Programme ID to be used.
 */
 
-GLuint loadShaders(std::string vertex_shader_path, std::string fragment_shader_path) {
+GLuint loadShaders(std::string vertex_shader_path, std::string fragment_shader_path, std::string geometry_shader_path) {
 	// Create the shaders
 	GLuint VertexShaderID = glCreateShader(GL_VERTEX_SHADER);
 	GLuint FragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
+	GLuint GeometryShaderID = glCreateShader(GL_GEOMETRY_SHADER);
 
 	// Read the Vertex Shader code from the file
 	std::string VertexShaderCode;
@@ -175,6 +176,21 @@ GLuint loadShaders(std::string vertex_shader_path, std::string fragment_shader_p
 	}
 	else {
 		printf("Impossible to open %s. Are you in the right directory ? Don't forget to read the FAQ !\n", vertex_shader_path.c_str());
+		getchar();
+		exit(-1);
+	}
+
+	// Read the Geometry Shader code from the file
+	std::string GeometryShaderCode;
+	std::ifstream GeometryShaderStream(geometry_shader_path, std::ios::in);
+	if (GeometryShaderStream.is_open()) {
+		std::string Line = "";
+		while (getline(GeometryShaderStream, Line))
+			GeometryShaderCode += "\n" + Line;
+		GeometryShaderStream.close();
+	}
+	else {
+		printf("Impossible to open %s. Are you in the right directory ? Don't forget to read the FAQ !\n", geometry_shader_path.c_str());
 		getchar();
 		exit(-1);
 	}
@@ -212,6 +228,21 @@ GLuint loadShaders(std::string vertex_shader_path, std::string fragment_shader_p
 		printf("%s\n", &VertexShaderErrorMessage[0]);
 	}
 
+	// Compile Geometry Shader
+	printf("Compiling shader : %s\n", geometry_shader_path.c_str());
+	char const * GeometrySourcePointer = GeometryShaderCode.c_str();
+	glShaderSource(GeometryShaderID, 1, &GeometrySourcePointer, nullptr);
+	glCompileShader(GeometryShaderID);
+
+	// Check Geometry Shader
+	glGetShaderiv(GeometryShaderID, GL_COMPILE_STATUS, &Result);
+	glGetShaderiv(GeometryShaderID, GL_INFO_LOG_LENGTH, &InfoLogLength);
+	if (InfoLogLength > 0) {
+		std::vector<char> GeometryShaderErrorMessage(InfoLogLength + 1);
+		glGetShaderInfoLog(GeometryShaderID, InfoLogLength, nullptr, &GeometryShaderErrorMessage[0]);
+		printf("%s\n", &GeometryShaderErrorMessage[0]);
+	}
+
 	// Compile Fragment Shader
 	printf("Compiling shader : %s\n", fragment_shader_path.c_str());
 	char const * FragmentSourcePointer = FragmentShaderCode.c_str();
@@ -231,8 +262,9 @@ GLuint loadShaders(std::string vertex_shader_path, std::string fragment_shader_p
 	printf("Linking program\n");
 	GLuint programme_id = glCreateProgram();
 	glAttachShader(programme_id, VertexShaderID);
+	glAttachShader(programme_id, GeometryShaderID);
 	glAttachShader(programme_id, FragmentShaderID);
-	
+
 	glBindAttribLocation(programme_id, 0, "in_Position");
 	glBindFragDataLocation(programme_id, 0, "out_Color");
 
@@ -248,16 +280,18 @@ GLuint loadShaders(std::string vertex_shader_path, std::string fragment_shader_p
 	}
 
 	glDetachShader(programme_id, VertexShaderID);
+	glDetachShader(programme_id, GeometryShaderID);
 	glDetachShader(programme_id, FragmentShaderID);
 
 	glDeleteShader(VertexShaderID);
+	glDeleteShader(GeometryShaderID);
 	glDeleteShader(FragmentShaderID);
 
 	//The three variables below hold the id of each of the variables in the shader
 	model_matrix_id = glGetUniformLocation(programme_id, "model_matrix");
 	view_matrix_id = glGetUniformLocation(programme_id, "view_matrix");
 	proj_matrix_id = glGetUniformLocation(programme_id, "proj_matrix");
-	
+
 	return programme_id;
 }
 
@@ -277,7 +311,7 @@ int main() {
 
 	for (int y = 0; y < terrain_mesh_height; y++) {
 		for (int x = 0; x < terrain_mesh_width; x++) {
-			
+
 			terrain_points.push_back(x);
 			terrain_points.push_back(y);
 			terrain_points.push_back(0.0f);
@@ -308,7 +342,7 @@ int main() {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, terrain_indices_vbo); //select the indices VBO buffer
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, terrain_indices.size() * sizeof(unsigned int), &terrain_indices.front(), GL_STATIC_DRAW); //copy indices data into the VBO
 
-	shader_programme = loadShaders("vertex.shader", "fragment.shader");
+	shader_programme = loadShaders("vertex.shader", "fragment.shader", "geometry.shader");
 
 	GLint posAttrib = glGetAttribLocation(shader_programme, "in_Position"); //enable the position input to the shaders
 	glEnableVertexAttribArray(posAttrib);
@@ -316,7 +350,7 @@ int main() {
 	glUseProgram(shader_programme);
 
 	while (!glfwWindowShouldClose(window)) {
-		
+
 		// wipe the drawing surface clear
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -325,14 +359,14 @@ int main() {
 			glm::vec3(camera_position),
 			glm::vec3(0), //looking at origin for now
 			glm::vec3(0.0f, 1.0f, 0.0f)
-		);
+			);
 
-		glm::mat4 terrain_mesh_translate = glm::translate(glm::vec3(-(float)terrain_mesh_width / 2, -(float)terrain_mesh_height/ 2, 0)); //center the terrain mesh
+		glm::mat4 terrain_mesh_translate = glm::translate(glm::vec3(-(float)terrain_mesh_width / 2, -(float)terrain_mesh_height / 2, 0)); //center the terrain mesh
 		glm::mat4 terrain_mesh_rotate = glm::rotate(glm::mat4(), (float)M_PI / 2, glm::vec3(1.0f, 0.0f, 0.0f)); //rotate onto y = 0 plane
-		
+
 		model_matrix = terrain_mesh_rotate * terrain_mesh_translate; //translate then rotate the mesh
 
-		//Pass the values of the three matrices to the shaders
+																	 //Pass the values of the three matrices to the shaders
 		glUniformMatrix4fv(model_matrix_id, 1, GL_FALSE, glm::value_ptr(model_matrix));
 		glUniformMatrix4fv(view_matrix_id, 1, GL_FALSE, glm::value_ptr(view_matrix));
 		glUniformMatrix4fv(proj_matrix_id, 1, GL_FALSE, glm::value_ptr(proj_matrix));
@@ -342,7 +376,7 @@ int main() {
 			terrain_indices.size(),
 			GL_UNSIGNED_INT,
 			(void*)0
-		);
+			);
 
 		// update other events like input handling 
 		glfwPollEvents();
