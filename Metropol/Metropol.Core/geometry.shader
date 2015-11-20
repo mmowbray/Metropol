@@ -1,13 +1,7 @@
-/*
-Taken from:
-http://www.geeks3d.com/20111111/simple-introduction-to-geometry-shaders-glsl-opengl-tutorial-part1/
-
-This is just a test
-*/
 #version 330 
 
 layout(points) in;
-layout(triangle_strip, max_vertices = 3) out;
+layout(points, max_vertices = 3) out;
 
 void main()
 {
@@ -18,18 +12,3 @@ void main()
 	}
 	EndPrimitive();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

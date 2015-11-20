@@ -348,6 +348,7 @@ int main() {
 	glEnableVertexAttribArray(posAttrib);
 
 	glUseProgram(shader_programme);
+	glPointSize(4.0);
 
 	while (!glfwWindowShouldClose(window)) {
 
@@ -366,17 +367,17 @@ int main() {
 
 		model_matrix = terrain_mesh_rotate * terrain_mesh_translate; //translate then rotate the mesh
 
-																	 //Pass the values of the three matrices to the shaders
+		//Pass the values of the three matrices to the shaders
 		glUniformMatrix4fv(model_matrix_id, 1, GL_FALSE, glm::value_ptr(model_matrix));
 		glUniformMatrix4fv(view_matrix_id, 1, GL_FALSE, glm::value_ptr(view_matrix));
 		glUniformMatrix4fv(proj_matrix_id, 1, GL_FALSE, glm::value_ptr(proj_matrix));
 
 		glDrawElements(
-			GL_LINES,
+			GL_POINTS,
 			terrain_indices.size(),
 			GL_UNSIGNED_INT,
 			(void*)0
-			);
+		);
 
 		// update other events like input handling 
 		glfwPollEvents();
