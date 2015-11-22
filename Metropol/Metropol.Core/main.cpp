@@ -24,8 +24,8 @@ Purpose: Entry point of application.
 #include <vector>
 #include <string>
 #include <fstream>
-#include <iostream>
 #include <algorithm>
+#include <iostream>
 
 using namespace std;
 
@@ -46,30 +46,59 @@ glm::mat4 proj_matrix;
 glm::mat4 view_matrix;
 
 //camera position vector
-glm::vec3 camera_position;
-float old_mouse_y_pos;
+glm::vec3 camera_position, camera_direction;
+
+float camera_movement_speed = 5.0f;
+float old_mouse_y_pos, old_mouse_x_pos;
+float camera_psi = 0.0f, camera_theta = 0.0f;
 
 /**
-Reacts to mouse scrollwheel input.
+Reacts to mouse input.
 
 @return void.
 */
 
-void cursorMoved(GLFWwindow* window, double xpos, double ypos) {
+void cursor_callback(GLFWwindow* window, double xpos, double ypos) {
 
-	if ((glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) && (ypos != old_mouse_y_pos)) { //dragging up or down
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
 
-		if (ypos > old_mouse_y_pos) {
-			camera_position.z += 10.0f;
-		}
-		else {
-			camera_position.z -= 10.0f;
-		}
+		if (xpos < old_mouse_x_pos)
+			camera_psi += M_PI / 600;
 
-		camera_position.z = max(camera_position.z, 1.0f); //clamp the camera position
-		old_mouse_y_pos = ypos;
+		if (xpos > old_mouse_x_pos)
+			camera_psi -= M_PI / 600;
+
+		if (ypos > old_mouse_y_pos)
+			camera_theta += M_PI / 600;
+
+		if (ypos < old_mouse_y_pos)
+			camera_theta -= M_PI / 600;
+
+		camera_direction = glm::normalize(glm::vec3(cos(camera_psi)*cos(camera_theta), sin(camera_theta), sin(camera_psi)*cos(camera_theta)));
 	}
 
+	old_mouse_x_pos = xpos;
+	old_mouse_y_pos = ypos;
+
+}
+
+/**
+Reacts to user key input.
+
+@return void.
+*/
+
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+
+	std::cout << "Camera Position: (" << camera_position.x << "," << camera_position.y << ", " << camera_position.z << ")" << std::endl;
+	std::cout << "Camera Direction: (" << camera_direction.x << "," << camera_direction.y << ", " << camera_direction.z << ")" << std::endl;
+
+	if (key == GLFW_KEY_W)
+		camera_position += camera_direction;
+	else if (key == GLFW_KEY_S)
+		camera_position -= camera_direction;
+	
 }
 
 /**
@@ -82,7 +111,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
 	glViewport(0, 0, width, height); //update the viewport on window resize
 
-									 // Update the Projection matrix after a window resize event
+	// Update the Projection matrix after a window resize event
 	proj_matrix = glm::perspective(45.0f, (float)width / (float)height, 0.1f, 100.0f);
 }
 
@@ -108,7 +137,8 @@ bool initialize() {
 	}
 
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-	glfwSetCursorPosCallback(window, cursorMoved);
+	glfwSetCursorPosCallback(window, cursor_callback);
+	glfwSetKeyCallback(window, key_callback);
 
 	glfwMakeContextCurrent(window);
 
@@ -125,8 +155,9 @@ bool initialize() {
 	glEnable(GL_DEPTH_TEST); /// Enable depth-testing
 	glDepthFunc(GL_LESS);	/// The type of testing i.e. a smaller value as "closer"
 
-							//setup other variables
-	camera_position = glm::vec3(0.0f, 10.0f, 12.0f);
+	//setup other variables
+	camera_position = glm::vec3(0.0f, 10.0f, 0.0f);
+	camera_direction= glm::vec3(0.0f, 0.0f, -1.0);
 
 	proj_matrix = glm::perspective(45.0f, 1280.0f / 720.0f, 0.1f, 100.0f);
 
@@ -358,7 +389,7 @@ int main() {
 		//update the camera matrix
 		view_matrix = glm::lookAt(
 			glm::vec3(camera_position),
-			glm::vec3(0), //looking at origin for now
+			glm::vec3(camera_position + camera_direction),
 			glm::vec3(0.0f, 1.0f, 0.0f)
 			);
 
