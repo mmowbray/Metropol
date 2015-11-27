@@ -408,8 +408,9 @@ int main() {
 		glUniformMatrix4fv(proj_matrix_id, 1, GL_FALSE, glm::value_ptr(proj_matrix));
 
 		glBindBuffer(GL_ARRAY_BUFFER, terrain_vertices_vbo);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, terrain_indices_vbo); //select the indices VBO buffer
-
+		
 		glDrawElements(
 			GL_POINTS,
 			terrain_indices.size(),
@@ -417,6 +418,7 @@ int main() {
 			(void*)0
 		);
 
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); //select the indices VBO buffer
 		b1->draw();
 
 		// update other events like input handling 

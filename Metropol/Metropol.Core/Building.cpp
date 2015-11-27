@@ -11,18 +11,14 @@ Building::Building()
 				points.push_back(x);
 				points.push_back(y);
 				points.push_back(z);
-
 			}
 		}
 	}
 
-	//glGenVertexArrays(1, &vao);	// Create Vertex Array Object
-	//glBindVertexArray(vao); //and select it
-
 	glGenBuffers(1, &buildingVBO); //generate 1 VBO for the building vertices
 	glBindBuffer(GL_ARRAY_BUFFER, buildingVBO);
 	glBufferData(GL_ARRAY_BUFFER, points.size() * sizeof(GLfloat), &points.front(), GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
 }
 
 Building::~Building()
@@ -32,13 +28,13 @@ Building::~Building()
 
 void Building::draw()
 {
-	//glBindVertexArray(vao);
-	glBindBuffer(GL_ARRAY_BUFFER, buildingVBO);
 
-	glDrawElements(
+	glBindBuffer(GL_ARRAY_BUFFER, buildingVBO);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glDrawArrays(
 		GL_POINTS,
-		points.size(),
-		GL_UNSIGNED_INT,
-		(void*)0
-		);
+		0,
+		points.size()
+	);
+
 }
