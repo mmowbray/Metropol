@@ -6,7 +6,7 @@ uniform mat4 view_matrix, model_matrix, proj_matrix;
 
 void create_voxel(vec4 center, mat4 CTM) 
 {
-	float size = 0.40;
+	float size = 0.14;
 	//4
 	gl_Position = CTM * (center + vec4(size, -size, size, 1.0));
 	EmitVertex();

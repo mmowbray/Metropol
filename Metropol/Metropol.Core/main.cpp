@@ -8,6 +8,8 @@ Purpose: Entry point of application.
 @version M0.1
 */
 
+#include "Building.h"
+
 #include "stdafx.h"
 
 #include "..\glew\glew.h"	// include GL Extension Wrangler
@@ -381,6 +383,8 @@ int main() {
 	glUseProgram(shader_programme);
 	glPointSize(4.0);
 
+	Building* b1 = new Building();
+
 	while (!glfwWindowShouldClose(window)) {
 
 		// wipe the drawing surface clear
@@ -403,6 +407,9 @@ int main() {
 		glUniformMatrix4fv(view_matrix_id, 1, GL_FALSE, glm::value_ptr(view_matrix));
 		glUniformMatrix4fv(proj_matrix_id, 1, GL_FALSE, glm::value_ptr(proj_matrix));
 
+		glBindBuffer(GL_ARRAY_BUFFER, terrain_vertices_vbo);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, terrain_indices_vbo); //select the indices VBO buffer
+
 		glDrawElements(
 			GL_POINTS,
 			terrain_indices.size(),
@@ -410,12 +417,17 @@ int main() {
 			(void*)0
 		);
 
+		b1->draw();
+
 		// update other events like input handling 
 		glfwPollEvents();
 		// put the stuff we've been drawing onto the display
 		glfwSwapBuffers(window);
 	}
 
+	delete b1;
+	b1 = NULL;
+	
 	cleanUp();
 	return 0;
 }
