@@ -1,17 +1,66 @@
 #version 330 
 
 layout(points) in;
-layout(triangle_strip, max_vertices = 10) out;
+layout(triangle_strip, max_vertices = 100) out;
+uniform mat4 view_matrix, model_matrix, proj_matrix;
 
-void create_voxel(vec4 center) 
+void create_voxel(vec4 center, mat4 CTM) 
 {
-	gl_Position = center + vec4(-0.2f, -0.4f, 0.0f, 0.0f);    // 1:bottom-left
+	float size = 0.20;
+	//4
+	gl_Position = CTM * (center + vec4(size, -size, size, 1.0));
 	EmitVertex();
-	gl_Position = center + vec4(0.2f, -0.14f, 0.0f, 0.0f);    // 2:bottom-right
+
+	//3
+	gl_Position = CTM * (center + vec4(-size, -size, size, 1.0));
 	EmitVertex();
-	gl_Position = center + vec4(-0.2f, 0.4f, 0.0f, 0.0f);    // 3:top-left
+
+	//7
+	gl_Position = CTM * (center + vec4(size, -size, -size, 1.0));
 	EmitVertex();
-	gl_Position = center + vec4(0.2f, 0.2f, 0.0f, 0.0f);    // 4:top-right
+
+	//8
+	gl_Position = CTM * (center + vec4(-size, -size, -size, 1.0));
+	EmitVertex();
+
+	//5
+	gl_Position = CTM * (center + vec4(-size, size, -size, 1.0));
+	EmitVertex();
+
+	//3
+	gl_Position = CTM * (center + vec4(-size, -size, size, 1.0));
+	EmitVertex();
+
+	//1
+	gl_Position = CTM * (center + vec4(-size, size, size, 1.0));
+	EmitVertex();
+
+	//4
+	gl_Position = CTM * (center + vec4(size, -size, size, 1.0));
+	EmitVertex();
+
+	//2
+	gl_Position = CTM * (center + vec4(size, size, size, 1.0));
+	EmitVertex();
+
+	//7
+	gl_Position = CTM * (center + vec4(size, -size, -size, 1.0));
+	EmitVertex();
+
+	//6
+	gl_Position = CTM * (center + vec4(size, size, -size, 1.0));
+	EmitVertex();
+
+	//5
+	gl_Position = CTM * (center + vec4(-size, size, -size, 1.0));
+	EmitVertex();
+
+	//2
+	gl_Position = CTM * (center + vec4(size, size, size, 1.0));
+	EmitVertex();
+
+	//1
+	gl_Position = CTM * (center + vec4(-size, size, size, 1.0));
 	EmitVertex();
 
 	EndPrimitive();
@@ -20,5 +69,6 @@ void create_voxel(vec4 center)
 
 void main()
 {
-	create_voxel(gl_in[0].gl_Position);
+	mat4 CTM = proj_matrix * view_matrix * model_matrix;
+	create_voxel(gl_in[0].gl_Position, CTM);
 }
