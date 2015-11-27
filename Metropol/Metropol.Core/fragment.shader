@@ -1,5 +1,7 @@
 #version 330
 
+uniform vec3 cam_pos;
+
 out vec4 frag_colour;	//This is the final output color used to render the point
 
 void main () {

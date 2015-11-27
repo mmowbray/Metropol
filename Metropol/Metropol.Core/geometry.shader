@@ -1,12 +1,12 @@
 #version 330 
 
 layout(points) in;
-layout(triangle_strip, max_vertices = 100) out;
+layout(triangle_strip, max_vertices = 15) out;
 uniform mat4 view_matrix, model_matrix, proj_matrix;
 
 void create_voxel(vec4 center, mat4 CTM) 
 {
-	float size = 0.20;
+	float size = 0.40;
 	//4
 	gl_Position = CTM * (center + vec4(size, -size, size, 1.0));
 	EmitVertex();
