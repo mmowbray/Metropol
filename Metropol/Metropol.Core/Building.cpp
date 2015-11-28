@@ -29,8 +29,8 @@ Building::Building(GLuint programme_id)
 	glBufferData(GL_ARRAY_BUFFER, points.size() * sizeof(GLfloat), &points.front(), GL_STATIC_DRAW);
 	model_matrix_id = glGetUniformLocation(programme_id, "locationModelMatrix");
 
-	position.x = rand() % 1 + 200;
-	position.y = rand() % 1 + 200;
+	position.x = rand() % 200 + 0;
+	position.y = rand() % 200 + 0;
 	position.z = 0.0f;
 }
 

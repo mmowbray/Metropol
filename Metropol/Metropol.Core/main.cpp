@@ -378,7 +378,8 @@ int main() {
 
 	Building b1(programme_id);
 	Building b2(programme_id);
-
+	Building b3(programme_id);
+	
 	glm::vec3 terrain_colour = glm::vec3(0.2, 0.8, 0.15);
 
 	while (!glfwWindowShouldClose(window)) {
@@ -418,6 +419,7 @@ int main() {
 
 		b1.draw();
 		b2.draw();
+		b3.draw();
 
 		// update other events like input handling 
 		glfwPollEvents();
