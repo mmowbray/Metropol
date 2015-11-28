@@ -37,7 +37,7 @@ GLFWwindow* window = 0x00;
 
 GLuint shader_programme = 0;
 
-GLuint vao = 0, terrain_vertices_vbo = 0, terrain_indices_vbo = 0;
+GLuint vao = 0, terrain_vertices_vbo = 0;
 
 GLuint model_matrix_id = 0;
 GLuint view_matrix_id = 0;
@@ -174,7 +174,6 @@ void cleanUp() {
 	//Release VAO/VBO memory
 	glDeleteProgram(shader_programme);
 	glDeleteBuffers(1, &terrain_vertices_vbo);
-	glDeleteBuffers(1, &terrain_indices_vbo);
 	glDeleteVertexArrays(1, &vao);
 
 	// Close GL context and any other GLFW resources
@@ -345,32 +344,12 @@ int main() {
 			terrain_points.push_back(x);
 			terrain_points.push_back(y);
 			terrain_points.push_back(0.0f);
-
-			//index ordering algorithm
-			if (x < terrain_mesh_width - 1 && y < terrain_mesh_width - 1)
-			{
-				//top triangle
-				terrain_indices.push_back(x + y * terrain_mesh_width);
-				terrain_indices.push_back(x + 1 + y * terrain_mesh_width);
-				terrain_indices.push_back(x + (y + 1) * terrain_mesh_width);
-
-				//botom triangle
-				terrain_indices.push_back(x + 1 + y * terrain_mesh_width);
-				terrain_indices.push_back(x + 1 + (y + 1) * terrain_mesh_width);
-				terrain_indices.push_back(x + (y + 1) * terrain_mesh_width);
-
-			}
 		}
 	}
 
 	glGenBuffers(1, &terrain_vertices_vbo); //generate 1 VBO for the terrain vertices
 	glBindBuffer(GL_ARRAY_BUFFER, terrain_vertices_vbo);
 	glBufferData(GL_ARRAY_BUFFER, terrain_points.size() * sizeof(GLfloat), &terrain_points.front(), GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-
-	glGenBuffers(1, &terrain_indices_vbo); //generate 1 VBO for the terrain vertex indices
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, terrain_indices_vbo); //select the indices VBO buffer
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, terrain_indices.size() * sizeof(unsigned int), &terrain_indices.front(), GL_STATIC_DRAW); //copy indices data into the VBO
 
 	shader_programme = loadShaders("vertex.shader", "fragment.shader", "geometry.shader");
 
@@ -403,19 +382,16 @@ int main() {
 		glUniformMatrix4fv(model_matrix_id, 1, GL_FALSE, glm::value_ptr(model_matrix));
 		glUniformMatrix4fv(view_matrix_id, 1, GL_FALSE, glm::value_ptr(view_matrix));
 		glUniformMatrix4fv(proj_matrix_id, 1, GL_FALSE, glm::value_ptr(proj_matrix));
-
+		
 		glBindBuffer(GL_ARRAY_BUFFER, terrain_vertices_vbo);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, terrain_indices_vbo); //select the indices VBO buffer
-		
-		glDrawElements(
+
+		glDrawArrays(
 			GL_POINTS,
-			terrain_indices.size(),
-			GL_UNSIGNED_INT,
-			(void*)0
+			0,
+			terrain_mesh_width * terrain_mesh_height
 		);
 
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); //select the indices VBO buffer
 		b1->draw();
 
 		// update other events like input handling 
