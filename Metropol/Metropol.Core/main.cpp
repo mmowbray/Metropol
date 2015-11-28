@@ -45,6 +45,7 @@ GLuint model_matrix_id = 0;
 GLuint view_matrix_id = 0;
 GLuint proj_matrix_id = 0;
 GLuint vox_colour_vec3_id = 0;
+GLuint camera_position_vec3_id = 0;
 
 glm::mat4 model_matrix;
 glm::mat4 proj_matrix;
@@ -332,6 +333,7 @@ GLuint loadShaders(std::string vertex_shader_path, std::string fragment_shader_p
 	view_matrix_id = glGetUniformLocation(programme_id, "view_matrix");
 	proj_matrix_id = glGetUniformLocation(programme_id, "proj_matrix");
 	vox_colour_vec3_id = glGetUniformLocation(programme_id, "voxel_Colour");
+	camera_position_vec3_id = glGetUniformLocation(programme_id, "camera_position");
 
 	return programme_id;
 }
@@ -381,7 +383,7 @@ int main() {
 
 	while (!glfwWindowShouldClose(window)) {
 
-		//glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+		glClearColor(0.30, 0.30, 0.30, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		//update the camera matrix
@@ -402,6 +404,7 @@ int main() {
 		glUniformMatrix4fv(proj_matrix_id, 1, GL_FALSE, glm::value_ptr(proj_matrix));
 
 		glUniform3f(vox_colour_vec3_id, terrain_colour.x, terrain_colour.y, terrain_colour.z);
+		glUniform3f(camera_position_vec3_id, camera_position.x, camera_position.y, camera_position.z);
 
 		glBindBuffer(GL_ARRAY_BUFFER, terrain_vertices_vbo);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
@@ -412,9 +415,9 @@ int main() {
 			terrain_mesh_width * terrain_mesh_height
 		);
 
-		//b.draw();
+		glUniform3f(vox_colour_vec3_id, 0.0, 0.0, 0.0);
+
 		b1.draw();
-		//b2.draw();
 
 		// update other events like input handling 
 		glfwPollEvents();

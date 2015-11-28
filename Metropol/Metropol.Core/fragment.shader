@@ -1,11 +1,19 @@
 #version 330
 
 uniform vec3 voxel_Colour;
+uniform vec3 camera_position;
 
 in vec3 out_Normal;
 in vec3 frag_Position;
 
 out vec4 frag_colour; //This is the final output color used to render the point
+
+float fog_f(float d) {
+	float end = 50;
+	float start = 150;
+
+	return (end - d) / (end - start);
+}
 
 void main () {
 
@@ -25,5 +33,11 @@ void main () {
 
 	vec3 resultant_colour = (ambient_contribution + diffuse_contribution);
 
-	frag_colour = vec4(resultant_colour, 1.0f);
+	//frag_colour = vec4(resultant_colour, 1.0f);
+	
+	
+	//frag_colour = vec4(f*resultant_colour + (1 - f)*glm((vec3(0.4, 0.4, 0.4))), 1.0f);
+	float f = fog_f(length(frag_Position - camera_position));
+	vec3 fog_colour = vec3(1, 0.0, 0.0);
+	frag_colour = vec4((f * fog_colour + (1 - f) * resultant_colour), 1.0f);
 };
