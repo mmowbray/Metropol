@@ -65,18 +65,18 @@ void cursor_callback(GLFWwindow* window, double xpos, double ypos) {
 	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
 
 		if (xpos < old_mouse_x_pos)
-			camera_psi += M_PI / 600;
+			camera_psi += M_PI / 400;
 
 		if (xpos > old_mouse_x_pos)
-			camera_psi -= M_PI / 600;
+			camera_psi -= M_PI / 400;
 
 		if (ypos > old_mouse_y_pos)
-			camera_theta += M_PI / 600;
+			camera_theta += M_PI / 400;
 
 		if (ypos < old_mouse_y_pos)
-			camera_theta -= M_PI / 600;
+			camera_theta -= M_PI / 400;
 
-		camera_direction = glm::normalize(glm::vec3(cos(camera_psi)*cos(camera_theta), sin(camera_theta), sin(camera_psi)*cos(camera_theta)));
+		camera_direction = glm::normalize(glm::vec3(sin(camera_psi)*cos(camera_theta), sin(camera_theta), -cos(camera_psi)*cos(camera_theta)));
 	}
 
 	old_mouse_x_pos = xpos;
@@ -92,9 +92,6 @@ Reacts to user key input.
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-
-	std::cout << "Camera Position: (" << camera_position.x << "," << camera_position.y << ", " << camera_position.z << ")" << std::endl;
-	std::cout << "Camera Direction: (" << camera_direction.x << "," << camera_direction.y << ", " << camera_direction.z << ")" << std::endl;
 
 	if (key == GLFW_KEY_W)
 		camera_position += camera_direction;
@@ -387,7 +384,7 @@ int main() {
 
 	while (!glfwWindowShouldClose(window)) {
 
-		// wipe the drawing surface clear
+		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		//update the camera matrix
@@ -425,6 +422,10 @@ int main() {
 		glfwPollEvents();
 		// put the stuff we've been drawing onto the display
 		glfwSwapBuffers(window);
+
+		std::cout << "Camera Position: (" << camera_position.x << "," << camera_position.y << ", " << camera_position.z << ")" << std::endl;
+		std::cout << "Camera Direction: (" << camera_direction.x << "," << camera_direction.y << ", " << camera_direction.z << ")" << std::endl;
+		std::cout << "Camera PSI: " << camera_psi << ", camera theta: " << camera_theta << std::endl;
 	}
 
 	delete b1;

@@ -25,6 +25,6 @@ void main () {
 
 	vec3 resultant_colour = (ambient_contribution + diffuse_contribution) * object_colour;*/
 
-	frag_colour = vec4(0.5, 0.6, 0.7, 1.0);
+	frag_colour = vec4(0.5, 0.4, 0.7, 1.0);
 	//frag_colour = vec4(resultant_colour, 1.0f);
 };
