@@ -104,7 +104,11 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		camera_position += camera_direction;
 	else if (key == GLFW_KEY_S)
 		camera_position -= camera_direction;
-	
+
+	if (key == GLFW_KEY_A)
+		camera_position -= glm::cross(camera_direction, glm::vec3(0.0, 1.0, 0.0));
+	else if (key == GLFW_KEY_D)
+		camera_position += glm::cross(camera_direction, glm::vec3(0.0, 1.0, 0.0));
 }
 
 /**
