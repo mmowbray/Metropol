@@ -9,7 +9,7 @@ out vec3 out_Normal;
 
 void create_voxel(vec4 center, mat4 CTM) 
 {
-	float size = 0.2;
+	float size = 0.5;
 
 	out_Normal = vec3(0.0, 0.0, -1.0);
 	//4

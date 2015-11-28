@@ -44,6 +44,7 @@ GLuint vao = 0, terrain_vertices_vbo = 0;
 GLuint model_matrix_id = 0;
 GLuint view_matrix_id = 0;
 GLuint proj_matrix_id = 0;
+GLuint vox_colour_vec3_id = 0;
 
 glm::mat4 model_matrix;
 glm::mat4 proj_matrix;
@@ -326,7 +327,7 @@ GLuint loadShaders(std::string vertex_shader_path, std::string fragment_shader_p
 	model_matrix_id = glGetUniformLocation(programme_id, "model_matrix");
 	view_matrix_id = glGetUniformLocation(programme_id, "view_matrix");
 	proj_matrix_id = glGetUniformLocation(programme_id, "proj_matrix");
-	cam_pos_vec3_id = glGetUniformLocation(programme_id, "light_pos");
+	vox_colour_vec3_id = glGetUniformLocation(programme_id, "voxel_Colour");
 
 	return programme_id;
 }
@@ -372,6 +373,8 @@ int main() {
 	Building b1(1);
 	Building b2(2);
 
+	glm::vec3 terrain_colour = glm::vec3(0.2, 0.8, 0.15);
+
 	while (!glfwWindowShouldClose(window)) {
 
 		//glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -393,6 +396,8 @@ int main() {
 		glUniformMatrix4fv(model_matrix_id, 1, GL_FALSE, glm::value_ptr(model_matrix));
 		glUniformMatrix4fv(view_matrix_id, 1, GL_FALSE, glm::value_ptr(view_matrix));
 		glUniformMatrix4fv(proj_matrix_id, 1, GL_FALSE, glm::value_ptr(proj_matrix));
+
+		glUniform3f(vox_colour_vec3_id, terrain_colour.x, terrain_colour.y, terrain_colour.z);
 
 		glBindBuffer(GL_ARRAY_BUFFER, terrain_vertices_vbo);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);

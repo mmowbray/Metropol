@@ -1,5 +1,7 @@
 #version 330
 
+uniform vec3 voxel_Colour;
+
 in vec3 out_Normal;
 in vec3 frag_Position;
 
@@ -13,7 +15,7 @@ void main () {
 	// ambient lighting involves simply setting a base colour that all fragments start off at, regardless of other conditions.
 	float ambient_strength = 0.2f;
 	vec3 ambient_colour = vec3(0.2, 0.2, 0.8);
-	vec3 ambient_contribution = ambient_strength * ambient_colour;
+	vec3 ambient_contribution = ambient_strength * voxel_Colour;
 
 	// diffuse lighting involves analyzing the angle between the light ray hitting the fragment and the normal of that fragment (Lambertian)
 	vec3 norm = normalize(out_Normal); //ensure the fragment's normal vector is of length 1
