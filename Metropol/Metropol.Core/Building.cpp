@@ -31,6 +31,7 @@ void Building::draw()
 
 	glBindBuffer(GL_ARRAY_BUFFER, buildingVBO);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
 	glDrawArrays(
 		GL_POINTS,
 		0,

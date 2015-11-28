@@ -29,4 +29,5 @@ private:
 	vector<GLfloat> points;
 	GLuint vao;
 	GLuint buildingVBO;
+	GLuint buildingNormalsVBO;
 };

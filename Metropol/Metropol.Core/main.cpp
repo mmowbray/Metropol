@@ -46,6 +46,7 @@ GLuint proj_matrix_id = 0;
 glm::mat4 model_matrix;
 glm::mat4 proj_matrix;
 glm::mat4 view_matrix;
+GLuint cam_pos_vec3_id = 0; //to broadcast the current camera position to the fragment shader
 
 //camera position vector
 glm::vec3 camera_position, camera_direction;
@@ -323,6 +324,7 @@ GLuint loadShaders(std::string vertex_shader_path, std::string fragment_shader_p
 	model_matrix_id = glGetUniformLocation(programme_id, "model_matrix");
 	view_matrix_id = glGetUniformLocation(programme_id, "view_matrix");
 	proj_matrix_id = glGetUniformLocation(programme_id, "proj_matrix");
+	cam_pos_vec3_id = glGetUniformLocation(programme_id, "light_pos");
 
 	return programme_id;
 }
@@ -366,7 +368,7 @@ int main() {
 
 	while (!glfwWindowShouldClose(window)) {
 
-		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+		//glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		//update the camera matrix
@@ -385,7 +387,7 @@ int main() {
 		glUniformMatrix4fv(model_matrix_id, 1, GL_FALSE, glm::value_ptr(model_matrix));
 		glUniformMatrix4fv(view_matrix_id, 1, GL_FALSE, glm::value_ptr(view_matrix));
 		glUniformMatrix4fv(proj_matrix_id, 1, GL_FALSE, glm::value_ptr(proj_matrix));
-		
+
 		glBindBuffer(GL_ARRAY_BUFFER, terrain_vertices_vbo);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
