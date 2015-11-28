@@ -65,17 +65,20 @@ void cursor_callback(GLFWwindow* window, double xpos, double ypos) {
 	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
 
 		if (xpos < old_mouse_x_pos)
-			camera_psi += M_PI / 400;
-
-		if (xpos > old_mouse_x_pos)
 			camera_psi -= M_PI / 400;
 
-		if (ypos > old_mouse_y_pos)
-			camera_theta += M_PI / 400;
+		if (xpos > old_mouse_x_pos)
+			camera_psi += M_PI / 400;
 
-		if (ypos < old_mouse_y_pos)
+		if (ypos > old_mouse_y_pos)
 			camera_theta -= M_PI / 400;
 
+		if (ypos < old_mouse_y_pos)
+			camera_theta += M_PI / 400;
+
+		camera_theta = glm::clamp(double(camera_theta), (-0.99 * M_PI) / 2.0 ,( 0.99 * M_PI) / 2.0);
+
+		std::cout << "Theta: " << camera_theta << std::endl;
 		camera_direction = glm::normalize(glm::vec3(sin(camera_psi)*cos(camera_theta), sin(camera_theta), -cos(camera_psi)*cos(camera_theta)));
 	}
 
@@ -399,9 +402,6 @@ int main() {
 		// put the stuff we've been drawing onto the display
 		glfwSwapBuffers(window);
 
-		std::cout << "Camera Position: (" << camera_position.x << "," << camera_position.y << ", " << camera_position.z << ")" << std::endl;
-		std::cout << "Camera Direction: (" << camera_direction.x << "," << camera_direction.y << ", " << camera_direction.z << ")" << std::endl;
-		std::cout << "Camera PSI: " << camera_psi << ", camera theta: " << camera_theta << std::endl;
 	}
 
 	delete b1;
