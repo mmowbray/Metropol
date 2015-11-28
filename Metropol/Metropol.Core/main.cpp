@@ -383,7 +383,7 @@ int main() {
 
 	while (!glfwWindowShouldClose(window)) {
 
-		glClearColor(0.30, 0.30, 0.30, 1.0f);
+		glClearColor(0.851f, 1.0f, 0.988f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		//update the camera matrix
