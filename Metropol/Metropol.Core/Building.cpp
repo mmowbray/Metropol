@@ -2,23 +2,48 @@
 
 Building::Building()
 {
-	for (int z = 0; z < 20; z++)
+	
+}
+
+Building::Building(int type)
+{
+	switch (type)
 	{
-		for (int y = 0; y < 10; y++)
+	case 1: //skyscraper 
+		for (int z = -70; z < 0; z++)
 		{
-			for (int x = 0; x < 10; x++)
+			for (int y = 50; y < 60; y++)
 			{
-				points.push_back(x);
-				points.push_back(y);
-				points.push_back(z);
+				for (int x = 0; x < 10; x++)
+				{
+					points.push_back(x);
+					points.push_back(y);
+					points.push_back(z);
+				}
 			}
 		}
+		break;
+	case 2: //wide building
+		for (int z = -15; z < 0; z++)
+		{
+			for (int y = 0; y < 40; y++)
+			{
+				for (int x = 0; x < 15; x++)
+				{
+					points.push_back(x);
+					points.push_back(y);
+					points.push_back(z);
+				}
+			}
+		}
+		break;
+	default:
+		break;
 	}
 
 	glGenBuffers(1, &buildingVBO); //generate 1 VBO for the building vertices
 	glBindBuffer(GL_ARRAY_BUFFER, buildingVBO);
 	glBufferData(GL_ARRAY_BUFFER, points.size() * sizeof(GLfloat), &points.front(), GL_STATIC_DRAW);
-
 }
 
 Building::~Building()

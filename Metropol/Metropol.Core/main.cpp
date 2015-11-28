@@ -9,6 +9,8 @@ Purpose: Entry point of application.
 */
 
 #include "Building.h"
+#include <cstdlib>
+#include <ctime>
 
 #include "stdafx.h"
 
@@ -66,16 +68,16 @@ void cursor_callback(GLFWwindow* window, double xpos, double ypos) {
 	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
 
 		if (xpos < old_mouse_x_pos)
-			camera_psi -= M_PI / 400;
+			camera_psi -= M_PI / 200;
 
 		if (xpos > old_mouse_x_pos)
-			camera_psi += M_PI / 400;
+			camera_psi += M_PI / 200;
 
 		if (ypos > old_mouse_y_pos)
-			camera_theta -= M_PI / 400;
+			camera_theta -= M_PI / 200;
 
 		if (ypos < old_mouse_y_pos)
-			camera_theta += M_PI / 400;
+			camera_theta += M_PI / 200;
 
 		camera_theta = glm::clamp(double(camera_theta), (-0.99 * M_PI) / 2.0 ,( 0.99 * M_PI) / 2.0);
 
@@ -115,7 +117,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 	glViewport(0, 0, width, height); //update the viewport on window resize
 
 	// Update the Projection matrix after a window resize event
-	proj_matrix = glm::perspective(45.0f, (float)width / (float)height, 0.1f, 100.0f);
+	proj_matrix = glm::perspective(45.0f, (float)width / (float)height, 0.1f, 500.0f);
 }
 
 /**
@@ -331,6 +333,8 @@ GLuint loadShaders(std::string vertex_shader_path, std::string fragment_shader_p
 
 int main() {
 
+	srand(time(0)); //random number generator seed
+
 	assert(sizeof(glm::vec3) == sizeof(float) * 3 && sizeof(glm::uvec3) == sizeof(unsigned int) * 3);
 
 	initialize();
@@ -341,7 +345,7 @@ int main() {
 	std::vector<GLuint> terrain_indices;
 	std::vector<GLfloat> terrain_points;
 
-	int terrain_mesh_width = 40, terrain_mesh_height = 40; //terrain mesh dimensions
+	int terrain_mesh_width = 200, terrain_mesh_height = 200; //terrain mesh dimensions
 
 	for (int y = 0; y < terrain_mesh_height; y++) {
 		for (int x = 0; x < terrain_mesh_width; x++) {
@@ -364,7 +368,9 @@ int main() {
 	glUseProgram(shader_programme);
 	glPointSize(4.0);
 
-	Building* b1 = new Building();
+	//Building b(rand() % 2 + 1);
+	Building b1(1);
+	Building b2(2);
 
 	while (!glfwWindowShouldClose(window)) {
 
@@ -397,7 +403,9 @@ int main() {
 			terrain_mesh_width * terrain_mesh_height
 		);
 
-		b1->draw();
+		//b.draw();
+		b1.draw();
+		//b2.draw();
 
 		// update other events like input handling 
 		glfwPollEvents();
@@ -405,9 +413,6 @@ int main() {
 		glfwSwapBuffers(window);
 
 	}
-
-	delete b1;
-	b1 = NULL;
 	
 	cleanUp();
 	return 0;
