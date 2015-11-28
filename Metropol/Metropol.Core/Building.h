@@ -21,13 +21,14 @@ class Building
 {
 public:
 	Building();
-	Building(int type);
+	Building(GLuint programme_id);
 	~Building();
 	void draw();
 private:
 	glm::vec3 color;
-	glm::mat4 locationModelMatrix;
+	glm::vec3 position;
 	vector<GLfloat> points;
 	GLuint buildingVBO;
 	GLuint buildingNormalsVBO;
+	GLuint model_matrix_id;
 };

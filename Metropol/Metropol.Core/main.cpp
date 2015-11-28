@@ -38,6 +38,7 @@ using namespace std;
 GLFWwindow* window = 0x00;
 
 GLuint shader_programme = 0;
+GLuint programme_id;
 
 GLuint vao = 0, terrain_vertices_vbo = 0;
 
@@ -301,7 +302,7 @@ GLuint loadShaders(std::string vertex_shader_path, std::string fragment_shader_p
 
 	// Link the program
 	printf("Linking program\n");
-	GLuint programme_id = glCreateProgram();
+	programme_id = glCreateProgram();
 	glAttachShader(programme_id, VertexShaderID);
 	glAttachShader(programme_id, GeometryShaderID);
 	glAttachShader(programme_id, FragmentShaderID);
@@ -375,9 +376,8 @@ int main() {
 	glUseProgram(shader_programme);
 	glPointSize(4.0);
 
-	//Building b(rand() % 2 + 1);
-	Building b1(1);
-	Building b2(2);
+	Building b1(programme_id);
+	Building b2(programme_id);
 
 	glm::vec3 terrain_colour = glm::vec3(0.2, 0.8, 0.15);
 
@@ -404,7 +404,6 @@ int main() {
 		glUniformMatrix4fv(proj_matrix_id, 1, GL_FALSE, glm::value_ptr(proj_matrix));
 
 		glUniform3f(vox_colour_vec3_id, terrain_colour.x, terrain_colour.y, terrain_colour.z);
-		glUniform3f(camera_position_vec3_id, camera_position.x, camera_position.y, camera_position.z);
 
 		glBindBuffer(GL_ARRAY_BUFFER, terrain_vertices_vbo);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
@@ -418,6 +417,7 @@ int main() {
 		glUniform3f(vox_colour_vec3_id, 0.0, 0.0, 0.0);
 
 		b1.draw();
+		b2.draw();
 
 		// update other events like input handling 
 		glfwPollEvents();
