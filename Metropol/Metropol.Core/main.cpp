@@ -30,6 +30,7 @@ Purpose: Entry point of application.
 #include <fstream>
 #include <algorithm>
 #include <iostream>
+#include "Tree.h"
 
 using namespace std;
 
@@ -61,6 +62,7 @@ float old_mouse_y_pos, old_mouse_x_pos;
 float camera_psi = 0.0f, camera_theta = 0.0f;
 
 std::vector<Building> scene_buildings;
+std::vector<Tree> scene_trees;
 
 /**
 Reacts to mouse input.
@@ -114,6 +116,16 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
 	if (key == GLFW_KEY_B && action == GLFW_PRESS)
 		scene_buildings.push_back(Building(programme_id));
+
+	if (key == GLFW_KEY_T && action == GLFW_PRESS)
+		scene_trees.push_back(Tree(programme_id));
+
+	if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
+	{
+		scene_buildings.clear();
+		scene_trees.clear();
+	}
+		
 }
 
 /**
@@ -417,6 +429,11 @@ int main() {
 		for (int i = 0; i < scene_buildings.size(); i++)
 		{
 			scene_buildings[i].draw();
+		}
+
+		for (int i = 0; i < scene_trees.size(); i++)
+		{
+			scene_trees[i].draw();
 		}
 
 		// update other events like input handling 

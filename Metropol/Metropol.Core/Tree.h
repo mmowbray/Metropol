@@ -26,10 +26,11 @@ public:
 	void draw();
 	void insertVoxel(glm::vec3 point);
 	void fillPointsBetween2Points(glm::vec3 p1, glm::vec3 p2);
+	void recursivelyGenerate(float length, glm::vec3 position, glm::vec3 orientation, int depth);
 private:
-	int*** space;
+	std::vector<vector<vector<GLint>>> space;
 	glm::vec3 position;
-	vector<GLfloat> points;
+	vector<GLint> points;
 	GLuint treeVBO;
 	GLuint model_matrix_id;
 };
