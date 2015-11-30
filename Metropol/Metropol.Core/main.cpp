@@ -60,6 +60,8 @@ float camera_movement_speed = 5.0f;
 float old_mouse_y_pos, old_mouse_x_pos;
 float camera_psi = 0.0f, camera_theta = 0.0f;
 
+std::vector<Building> scene_buildings;
+
 /**
 Reacts to mouse input.
 
@@ -109,6 +111,9 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		camera_position -= glm::cross(camera_direction, glm::vec3(0.0, 1.0, 0.0));
 	else if (key == GLFW_KEY_D)
 		camera_position += glm::cross(camera_direction, glm::vec3(0.0, 1.0, 0.0));
+
+	if (key == GLFW_KEY_B && action == GLFW_PRESS)
+		scene_buildings.push_back(Building(programme_id));
 }
 
 /**
@@ -415,9 +420,10 @@ int main() {
 
 		glUniform3f(vox_colour_vec3_id, 0.0, 0.0, 0.0);
 
-		b1.draw();
-		//b2.draw();
-		//b3.draw();
+		for (int i = 0; i < scene_buildings.size(); i++)
+		{
+			scene_buildings[i].draw();
+		}
 
 		// update other events like input handling 
 		glfwPollEvents();
