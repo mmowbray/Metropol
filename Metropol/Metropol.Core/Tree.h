@@ -24,10 +24,12 @@ public:
 	Tree(GLuint programme_id);
 	~Tree();
 	void draw();
+	void insertVoxel(glm::vec3 point);
+	void fillPointsBetween2Points(glm::vec3 p1, glm::vec3 p2);
 private:
-	glm::vec3 position;
 	int*** space;
+	glm::vec3 position;
 	vector<GLfloat> points;
-	GLuint buildingVBO;
+	GLuint treeVBO;
 	GLuint model_matrix_id;
 };
