@@ -7,15 +7,15 @@ Building::Building()
 
 Building::Building(GLuint programme_id)
 {
-	int xMax = rand() % 60 + 15;
-	int yMax = rand() % 60 + 15;
-	int zMax = rand() % 100 + 20;
+	int width = rand() % 60 + 15;
+	int height = rand() % 80 + 15;
+	int depth = rand() % 10 + 20;
 
-	for (int z = -zMax; z < 0; z++)
+	for (int x = 0; x < width;x++)
 	{
-		for (int y = 0; y < yMax; y++)
+		for (int z = 0; z < depth; z++)
 		{
-			for (int x = 0; x < xMax; x++)
+			for (int y = 0; y < height; y++)
 			{
 				points.push_back(x);
 				points.push_back(y);
@@ -29,9 +29,9 @@ Building::Building(GLuint programme_id)
 	glBufferData(GL_ARRAY_BUFFER, points.size() * sizeof(GLfloat), &points.front(), GL_STATIC_DRAW);
 	model_matrix_id = glGetUniformLocation(programme_id, "model_matrix");
 
-	position.x = rand() % 200 + 150;
-	position.y = rand() % 200;
-	position.z = 0.0f;
+	position.x = -1*rand() % 20;
+	position.y = 0.5f;
+	position.z = -1 * rand() % 20;
 }
 
 Building::~Building()
@@ -45,7 +45,7 @@ void Building::draw()
 	glm::mat4 position_matrix = glm::translate(position);
 	glUniformMatrix4fv(model_matrix_id, 1, GL_FALSE, glm::value_ptr(position_matrix));
 
-	printf("position.x is\:%f\n", position.x);
+	printf("position is\:(%f,%f,%f)\n", position.x, position.y, position.z);
 
 	glBindBuffer(GL_ARRAY_BUFFER, buildingVBO);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
@@ -60,7 +60,7 @@ void Building::draw()
 void Building::moveX()
 {
 	position.x = 0.0;
-	position.y = 0.0;
+	position.y = 0.5;
 	position.z = 0.0;
 }
 
