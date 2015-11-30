@@ -378,12 +378,8 @@ int main() {
 
 	glUseProgram(shader_programme);
 	glPointSize(4.0);
-
-	Building b1(programme_id);
-	//Building b2(programme_id);
-	//Building b3(programme_id);
 	
-	glm::vec3 terrain_colour = glm::vec3(0.2, 0.8, 0.15);
+	glm::vec3 terrain_colour = glm::vec3(0.42);
 
 	while (!glfwWindowShouldClose(window)) {
 
@@ -395,7 +391,7 @@ int main() {
 			glm::vec3(camera_position),
 			glm::vec3(camera_position + camera_direction),
 			glm::vec3(0.0f, 1.0f, 0.0f)
-			);
+		);
 
 		glm::mat4 terrain_mesh_translate = glm::translate(glm::vec3(-(float)terrain_mesh_width / 2, -(float)terrain_mesh_height / 2, 0)); //center the terrain mesh
 		glm::mat4 terrain_mesh_rotate = glm::rotate(glm::mat4(), (float)M_PI / 2, glm::vec3(1.0f, 0.0f, 0.0f)); //rotate onto y = 0 plane
@@ -407,7 +403,7 @@ int main() {
 		glUniformMatrix4fv(view_matrix_id, 1, GL_FALSE, glm::value_ptr(view_matrix));
 		glUniformMatrix4fv(proj_matrix_id, 1, GL_FALSE, glm::value_ptr(proj_matrix));
 
-		glUniform3f(vox_colour_vec3_id, terrain_colour.x, terrain_colour.y, terrain_colour.z);
+		glUniform3f(vox_colour_vec3_id, terrain_colour.r, terrain_colour.g, terrain_colour.b);
 
 		glBindBuffer(GL_ARRAY_BUFFER, terrain_vertices_vbo);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
@@ -417,8 +413,6 @@ int main() {
 			0,
 			terrain_mesh_width * terrain_mesh_height
 		);
-
-		glUniform3f(vox_colour_vec3_id, 0.0, 0.0, 0.0);
 
 		for (int i = 0; i < scene_buildings.size(); i++)
 		{

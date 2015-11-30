@@ -10,12 +10,11 @@ out vec4 frag_colour; //This is the final output color used to render the point
 
 void main () {
 
-	vec3 light_colour = vec3(0.0, 1.0, 1.0); //the colour of the light (yellow)
+	vec3 light_colour = vec3(0.0, 0.0, 1.0); //the colour of the light (yellow)
 	vec3 light_position = vec3(-100.0, 100.0, -100.0); //position of the light source
 
 	// ambient lighting involves simply setting a base colour that all fragments start off at, regardless of other conditions.
-	float ambient_strength = 0.2f;
-	vec3 ambient_colour = vec3(0.2, 0.2, 0.8);
+	float ambient_strength = 0.8f;
 	vec3 ambient_contribution = ambient_strength * voxel_Colour;
 
 	// diffuse lighting involves analyzing the angle between the light ray hitting the fragment and the normal of that fragment (Lambertian)
