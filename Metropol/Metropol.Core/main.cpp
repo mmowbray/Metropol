@@ -60,8 +60,6 @@ float camera_movement_speed = 5.0f;
 float old_mouse_y_pos, old_mouse_x_pos;
 float camera_psi = 0.0f, camera_theta = 0.0f;
 
-Building *b1;
-
 /**
 Reacts to mouse input.
 
@@ -110,10 +108,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	if (key == GLFW_KEY_A)
 		camera_position -= glm::cross(camera_direction, glm::vec3(0.0, 1.0, 0.0));
 	else if (key == GLFW_KEY_D)
-		b1->moveX();
-		//camera_position += glm::cross(camera_direction, glm::vec3(0.0, 1.0, 0.0));
-
-	printf("building position: (%f,%f,%f)\n", b1->getPosition().x, b1->getPosition().y, b1->getPosition().z);
+		camera_position += glm::cross(camera_direction, glm::vec3(0.0, 1.0, 0.0));
 }
 
 /**
@@ -379,11 +374,7 @@ int main() {
 	glUseProgram(shader_programme);
 	glPointSize(4.0);
 
-	//Building *1(programme_id);
-	b1 = new Building(programme_id);
-
-
-
+	Building b1(programme_id);
 	//Building b2(programme_id);
 	//Building b3(programme_id);
 	
@@ -424,7 +415,7 @@ int main() {
 
 		glUniform3f(vox_colour_vec3_id, 0.0, 0.0, 0.0);
 
-		b1->draw();
+		b1.draw();
 		//b2.draw();
 		//b3.draw();
 

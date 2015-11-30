@@ -56,15 +56,3 @@ void Building::draw()
 	);
 
 }
-
-void Building::moveX()
-{
-	position.x = 0.0;
-	position.y = 0.5;
-	position.z = 0.0;
-}
-
-glm::vec3 Building::getPosition()
-{
-	return position;
-}
