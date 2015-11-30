@@ -17,9 +17,14 @@ Building::Building(GLuint programme_id)
 		{
 			for (int y = 0; y < height; y++)
 			{
-				points.push_back(x);
-				points.push_back(y);
-				points.push_back(z);
+
+				if (x == 0 || y == 0 || z == 0 || x == width-1 || y == height-1 || z == depth-1)
+				{
+					points.push_back(x);
+					points.push_back(y);
+					points.push_back(z);
+				}
+
 			}
 		}
 	}
