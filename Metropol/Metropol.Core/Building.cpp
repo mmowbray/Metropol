@@ -7,9 +7,9 @@ Building::Building()
 
 Building::Building(GLuint programme_id)
 {
-	int width = rand() % 60 + 15;
-	int height = rand() % 80 + 15;
-	int depth = rand() % 10 + 20;
+	int width = rand() % 20 + 10;
+	int height = rand() % 60 + 10;
+	int depth = rand() % 20 + 10;
 
 	for (int x = 0; x < width;x++)
 	{
@@ -29,14 +29,48 @@ Building::Building(GLuint programme_id)
 		}
 	}
 
+
 	glGenBuffers(1, &buildingVBO); //generate 1 VBO for the building vertices
 	glBindBuffer(GL_ARRAY_BUFFER, buildingVBO);
 	glBufferData(GL_ARRAY_BUFFER, points.size() * sizeof(GLfloat), &points.front(), GL_STATIC_DRAW);
 	model_matrix_id = glGetUniformLocation(programme_id, "model_matrix");
+	vox_colour_vec3_id = glGetUniformLocation(programme_id, "voxel_Colour");
 
-	position.x = -1*rand() % 200;
+	int xPos = rand() % 200;
+	int zPos = rand() % 200;
+
+	if (xPos < width)
+	{
+		xPos += width;
+	}
+	/*
+	if ((zPos + depth) > 200)
+	{
+		zPos += ;
+	}*/
+
+	position.x = -1 * xPos;
 	position.y = 0.5f;
-	position.z = -1 * rand() % 200;
+	position.z = -1 * zPos;
+	
+	int colorType = rand() % 3;
+
+	switch (colorType)
+	{
+		case 0:
+			color = glm::vec3(0.212); //dark grey
+			break;
+		case 1:
+			color = glm::vec3(0.561); //light grey
+			break;
+		case 2:
+			color = glm::vec3(0.361, 0.251, 0.2); //brown
+			break;
+		default:
+			break;
+	}
+
+	printf("Position z: %f\n", position.z);
 }
 
 Building::~Building()
@@ -46,6 +80,7 @@ Building::~Building()
 
 void Building::draw()
 {
+	glUniform3f(vox_colour_vec3_id, color.r, color.g, color.b);
 
 	glm::mat4 position_matrix = glm::translate(position);
 	glUniformMatrix4fv(model_matrix_id, 1, GL_FALSE, glm::value_ptr(position_matrix));

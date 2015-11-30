@@ -26,9 +26,9 @@ public:
 	void draw();
 private:
 	glm::vec3 color;
+	GLuint vox_colour_vec3_id;
 	glm::vec3 position;
 	vector<GLfloat> points;
 	GLuint buildingVBO;
-	GLuint buildingNormalsVBO;
 	GLuint model_matrix_id;
 };

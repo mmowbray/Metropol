@@ -368,7 +368,7 @@ int main() {
 	std::vector<GLuint> terrain_indices;
 	std::vector<GLfloat> terrain_points;
 
-	int terrain_mesh_width = 200, terrain_mesh_height = 200; //terrain mesh dimensions
+	int terrain_mesh_width = 400, terrain_mesh_height = 400; //terrain mesh dimensions
 
 	for (int y = 0; y < terrain_mesh_height; y++) {
 		for (int x = 0; x < terrain_mesh_width; x++) {
