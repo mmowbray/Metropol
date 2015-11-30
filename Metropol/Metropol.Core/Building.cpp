@@ -49,9 +49,6 @@ void Building::draw()
 
 	glm::mat4 position_matrix = glm::translate(position);
 	glUniformMatrix4fv(model_matrix_id, 1, GL_FALSE, glm::value_ptr(position_matrix));
-
-	printf("position is\:(%f,%f,%f)\n", position.x, position.y, position.z);
-
 	glBindBuffer(GL_ARRAY_BUFFER, buildingVBO);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 	glDrawArrays(
