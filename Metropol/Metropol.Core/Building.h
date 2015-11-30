@@ -24,6 +24,8 @@ public:
 	Building(GLuint programme_id);
 	~Building();
 	void draw();
+	void moveX();
+	glm::vec3 getPosition();
 private:
 	glm::vec3 color;
 	glm::vec3 position;

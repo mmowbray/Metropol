@@ -1,6 +1,7 @@
 #version 330 
 
 uniform mat4 view_matrix, model_matrix, proj_matrix;
+uniform mat4 locationModelMatrix;
 
 layout(points) in;
 layout(triangle_strip, max_vertices = 100) out;

@@ -60,6 +60,8 @@ float camera_movement_speed = 5.0f;
 float old_mouse_y_pos, old_mouse_x_pos;
 float camera_psi = 0.0f, camera_theta = 0.0f;
 
+Building *b1;
+
 /**
 Reacts to mouse input.
 
@@ -83,8 +85,6 @@ void cursor_callback(GLFWwindow* window, double xpos, double ypos) {
 			camera_theta += M_PI / 200;
 
 		camera_theta = glm::clamp(double(camera_theta), (-0.99 * M_PI) / 2.0 ,( 0.99 * M_PI) / 2.0);
-
-		std::cout << "Theta: " << camera_theta << std::endl;
 		camera_direction = glm::normalize(glm::vec3(sin(camera_psi)*cos(camera_theta), sin(camera_theta), -cos(camera_psi)*cos(camera_theta)));
 	}
 
@@ -110,7 +110,10 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	if (key == GLFW_KEY_A)
 		camera_position -= glm::cross(camera_direction, glm::vec3(0.0, 1.0, 0.0));
 	else if (key == GLFW_KEY_D)
-		camera_position += glm::cross(camera_direction, glm::vec3(0.0, 1.0, 0.0));
+		b1->moveX();
+		//camera_position += glm::cross(camera_direction, glm::vec3(0.0, 1.0, 0.0));
+
+	printf("building position: (%f,%f,%f)\n", b1->getPosition().x, b1->getPosition().y, b1->getPosition().z);
 }
 
 /**
@@ -376,9 +379,13 @@ int main() {
 	glUseProgram(shader_programme);
 	glPointSize(4.0);
 
-	Building b1(programme_id);
-	Building b2(programme_id);
-	Building b3(programme_id);
+	//Building *1(programme_id);
+	b1 = new Building(programme_id);
+
+
+
+	//Building b2(programme_id);
+	//Building b3(programme_id);
 	
 	glm::vec3 terrain_colour = glm::vec3(0.2, 0.8, 0.15);
 
@@ -417,9 +424,9 @@ int main() {
 
 		glUniform3f(vox_colour_vec3_id, 0.0, 0.0, 0.0);
 
-		b1.draw();
-		b2.draw();
-		b3.draw();
+		b1->draw();
+		//b2.draw();
+		//b3.draw();
 
 		// update other events like input handling 
 		glfwPollEvents();
