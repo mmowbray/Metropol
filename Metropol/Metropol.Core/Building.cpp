@@ -29,25 +29,14 @@ Building::Building(GLuint programme_id)
 		}
 	}
 
-
 	glGenBuffers(1, &buildingVBO); //generate 1 VBO for the building vertices
 	glBindBuffer(GL_ARRAY_BUFFER, buildingVBO);
 	glBufferData(GL_ARRAY_BUFFER, points.size() * sizeof(GLfloat), &points.front(), GL_STATIC_DRAW);
 	model_matrix_id = glGetUniformLocation(programme_id, "model_matrix");
 	vox_colour_vec3_id = glGetUniformLocation(programme_id, "voxel_Colour");
 
-	int xPos = rand() % 200;
-	int zPos = rand() % 200;
-
-	if (xPos < width)
-	{
-		xPos += width;
-	}
-	/*
-	if ((zPos + depth) > 200)
-	{
-		zPos += ;
-	}*/
+	int xPos = rand() % (200 - width) + width;
+	int zPos = rand() % (200 - depth) + depth;
 
 	position.x = -1 * xPos;
 	position.y = 0.5f;
@@ -69,8 +58,6 @@ Building::Building(GLuint programme_id)
 		default:
 			break;
 	}
-
-	printf("Position z: %f\n", position.z);
 }
 
 Building::~Building()
