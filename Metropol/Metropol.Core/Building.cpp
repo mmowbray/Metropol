@@ -8,7 +8,7 @@ Building::Building()
 Building::Building(GLuint programme_id)
 {
 	int width = rand() % 20 + 10;
-	int height = rand() % 60 + 10;
+	int height = rand() % 90 + 20;
 	int depth = rand() % 20 + 10;
 
 	for (int x = 0; x < width;x++)

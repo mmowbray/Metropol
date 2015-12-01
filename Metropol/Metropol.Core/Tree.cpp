@@ -41,8 +41,6 @@ void Tree::fillPointsBetween2Points(glm::vec3 p1, glm::vec3 p2) {
 
 void Tree::addBush(glm::vec3 sphere_centre, int radius) {
 
-
-
 	for (int x = 0; x < 100; x++)
 	{
 		for (int z = 0; z < 100; z++)
@@ -140,7 +138,7 @@ Tree::Tree(GLuint programme_id)
 	glm::vec3 startingPoint = glm::vec3(100 / 2, 0, 100 / 2); //rather use dimension here
 	glm::vec3 startingOrientation = glm::vec3(0.0, 1.0, 0.0);
 
-	recursivelyGenerate(100 / 4, startingPoint, startingOrientation, 0);
+	recursivelyGenerate(100/5, startingPoint, startingOrientation, 0);
 
 	//fill vbo with tree points
 
@@ -170,10 +168,28 @@ Tree::Tree(GLuint programme_id)
 	glBindBuffer(GL_ARRAY_BUFFER, treeVBO);
 	glBufferData(GL_ARRAY_BUFFER, points.size() * sizeof(GLint), &points.front(), GL_STATIC_DRAW);
 	model_matrix_id = glGetUniformLocation(programme_id, "model_matrix");
+	vox_colour_vec3_id = glGetUniformLocation(programme_id, "voxel_Colour");
 
-	position.x = 0.0f;
-	position.y = 10.5f;
-	position.z = 0.0f;
+	position.x = -rand() % 200;
+	position.y = -0.5f;
+	position.z = -rand() % 200;
+
+	int colorType = rand() % 3;
+
+	switch (colorType)
+	{
+	case 0:
+		color = glm::vec3(0.2, 0.5, 0.2); //dark grey
+		break;
+	case 1:
+		color = glm::vec3(0.4, 0.7, 0.1); //light grey
+		break;
+	case 2:
+		color = glm::vec3(0.2, 0.9, 0.23); //brown
+		break;
+	default:
+		break;
+	}
 }
 
 Tree::~Tree()
@@ -183,6 +199,8 @@ Tree::~Tree()
 
 void Tree::draw()
 {
+	glUniform3f(vox_colour_vec3_id, color.r, color.g, color.b);
+
 	glm::mat4 position_matrix = glm::translate(position);
 	glUniformMatrix4fv(model_matrix_id, 1, GL_FALSE, glm::value_ptr(position_matrix));
 	glBindBuffer(GL_ARRAY_BUFFER, treeVBO);

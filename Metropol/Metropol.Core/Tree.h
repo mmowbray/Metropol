@@ -29,7 +29,9 @@ public:
 	void recursivelyGenerate(float length, glm::vec3 position, glm::vec3 orientation, int depth);
 	void addBush(glm::vec3 sphere_centre, int size);
 private:
+	glm::vec3 color;
 	std::vector<vector<vector<GLint>>> space;
+	GLuint vox_colour_vec3_id;
 	glm::vec3 position;
 	vector<GLint> points;
 	GLuint treeVBO;
