@@ -9,22 +9,15 @@ Tree::Tree()
 }
 
 void Tree::insertVoxel(glm::vec3 point) {
-	//space.at(int(point.x)).at(int(point.y)).at(int(point.z)) = 1;
 
 	int x_index = static_cast<int>(point.x);
 	int y_index = static_cast<int>(point.y);
 	int z_index = static_cast<int>(point.z);
 
-	if (x_index > 99)
-		x_index = 99;
+	points.push_back(x_index);
+	points.push_back(y_index);
+	points.push_back(z_index);
 
-	if (y_index > 99)
-		y_index = 99;
-
-	if (z_index > 99)
-		z_index = 99;
-
-	space.at(x_index).at(z_index).at(y_index) = 1;
 }
 
 void Tree::fillPointsBetween2Points(glm::vec3 p1, glm::vec3 p2) {
@@ -32,7 +25,7 @@ void Tree::fillPointsBetween2Points(glm::vec3 p1, glm::vec3 p2) {
 	glm::vec3 direction = glm::normalize(p2 - p1);
 	glm::vec3 currentPosition = p1;
 
-	while (glm::distance(currentPosition, p2) > 2.0f ) {
+	while (glm::distance(currentPosition, p2) > 4.0f ) {
 		insertVoxel(currentPosition);
 		currentPosition += direction;
 	}
@@ -47,18 +40,14 @@ void Tree::addBush(glm::vec3 sphere_centre, int radius) {
 		{
 			for (int y = 0; y < 100; y++)
 			{
-
-
 				glm::vec3 current_pos = glm::vec3(x, y, z);
 				if (pow((current_pos.x - sphere_centre.x), 2) + pow((current_pos.y - sphere_centre.y), 2) + pow((current_pos.z - sphere_centre.z), 2) - pow(radius, 2) < 10.0)
 				{
 					insertVoxel(current_pos);
 				}
-
 			}
 		}
 	}
-
 }
 
 void Tree::recursivelyGenerate(float length, glm::vec3 position, glm::vec3 orientation, int depth) {
@@ -117,55 +106,13 @@ void Tree::recursivelyGenerate(float length, glm::vec3 position, glm::vec3 orien
 Tree::Tree(GLuint programme_id)
 {
 	int dimension = rand() % 60 + 15;
-	
-	//space[100][100][100]; //rather use dimension here	
 
-	for (int x = 0; x < 100; x++)
-	{
-		std::vector<vector<int>> new_row;
-		space.push_back(new_row);
-
-		for (int z = 0; z < 100; z++)
-		{
-			std::vector<int> new_row2;
-			space.at(x).push_back(new_row2);
-
-			for (int y = 0; y < 100; y++)
-			{
-				space.at(x).at(z).push_back(0);
-			}
-		}
-	}
 	//put tree points
 
 	glm::vec3 startingPoint = glm::vec3(100 / 2, 0, 100 / 2); //rather use dimension here
 	glm::vec3 startingOrientation = glm::vec3(0.0, 1.0, 0.0);
 
 	recursivelyGenerate(100/5, startingPoint, startingOrientation, 0);
-
-	//fill vbo with tree points
-
-	for (int x = 0; x < 100; x++)
-	{
-		for (int z = 0; z < 100; z++)
-		{
-			for (int y = 0; y < 100; y++)
-			{
-
-				if (space.at(x).at(z).at(y) == 1)
-				{
-					
-					points.push_back(x);
-					points.push_back(y);
-					points.push_back(z); 
-
-				}
-
-				//printf("current tree voxel: %i,%i,%i\n", x, y, z);
-
-			}
-		}
-	}
 
 	glGenBuffers(1, &treeVBO); //generate 1 VBO for the building vertices
 	glBindBuffer(GL_ARRAY_BUFFER, treeVBO);
@@ -184,23 +131,23 @@ Tree::Tree(GLuint programme_id)
 
 	switch (colorType)
 	{
-	case 0:
-		color = glm::vec3(0.2, 0.5, 0.2); //green1
-		break;
-	case 1:
-		color = glm::vec3(0.4, 0.7, 0.1); //green2
-		break;
-	case 2:
-		color = glm::vec3(0.2, 0.9, 0.23); //green3
-		break;
-	case 3:
-		color = glm::vec3(0.96, 0.72, 0.0); //autumn orange
-		break;
-	case 4:
-		color = glm::vec3(0.69, 0.13, 0.13); //autumn red
-		break;
-	default:
-		break;
+		case 0:
+			color = glm::vec3(0.2, 0.5, 0.2); //green1
+			break;
+		case 1:
+			color = glm::vec3(0.4, 0.7, 0.1); //green2
+			break;
+		case 2:
+			color = glm::vec3(0.2, 0.9, 0.23); //green3
+			break;
+		case 3:
+			color = glm::vec3(0.96, 0.72, 0.0); //autumn orange
+			break;
+		case 4:
+			color = glm::vec3(0.69, 0.13, 0.13); //autumn red
+			break;
+		default:
+			break;
 	}
 }
 
