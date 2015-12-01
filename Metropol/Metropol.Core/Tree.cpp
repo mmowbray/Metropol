@@ -180,8 +180,6 @@ Tree::Tree(GLuint programme_id)
 	position.y = -0.5f;
 	position.z = -1 * zPos;
 
-	printf("XPos: %f, ZPos: %f\n", position.x, position.z);
-
 	int colorType = rand() % 5;
 
 	switch (colorType)
