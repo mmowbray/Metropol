@@ -1,4 +1,5 @@
 #include "Building.h"
+#define M_PI 3.14159265358979323846264338327950288
 
 Building::Building()
 {
@@ -11,23 +12,38 @@ Building::Building(GLuint programme_id)
 	int height = rand() % 90 + 20;
 	int depth = rand() % 20 + 10;
 
-	for (int x = 0; x < width;x++)
+	/*if (rand() % 2 == 1) //created squashed cylinder building
 	{
-		for (int z = 0; z < depth; z++)
+		for (int i = 0; i < height; i++)
 		{
-			for (int y = 0; y < height; y++)
+			for (float theta = 0; theta < 2 * M_PI; theta += M_PI / 180)
 			{
-
-				if (x == 0 || y == 0 || z == 0 || x == width-1 || y == height-1 || z == depth-1)
-				{
-					points.push_back(x);
-					points.push_back(y);
-					points.push_back(z);
-				}
-
+				points.push_back(width*cos(theta));
+				points.push_back(i);
+				points.push_back(height*sin(theta));
 			}
 		}
 	}
+	else //create orthogonal building
+	{*/
+		for (int x = 0; x < width; x++)
+		{
+			for (int z = 0; z < depth; z++)
+			{
+				for (int y = 0; y < height; y++)
+				{
+
+					if (x == 0 || y == 0 || z == 0 || x == width - 1 || y == height - 1 || z == depth - 1)
+					{
+						points.push_back(x);
+						points.push_back(y);
+						points.push_back(z);
+					}
+
+				}
+			}
+		}
+	//}
 
 	glGenBuffers(1, &buildingVBO); //generate 1 VBO for the building vertices
 	glBindBuffer(GL_ARRAY_BUFFER, buildingVBO);
@@ -42,7 +58,7 @@ Building::Building(GLuint programme_id)
 	position.y = 0.5f;
 	position.z = -1 * zPos;
 	
-	int colorType = rand() % 3;
+	int colorType = rand() % 4;
 
 	switch (colorType)
 	{
@@ -54,6 +70,9 @@ Building::Building(GLuint programme_id)
 			break;
 		case 2:
 			color = glm::vec3(0.361, 0.251, 0.2); //brown
+			break;
+		case 3:
+			color = glm::vec3(0.89); //silver/white
 			break;
 		default:
 			break;

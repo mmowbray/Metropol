@@ -105,14 +105,14 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 {
 
 	if (key == GLFW_KEY_W)
-		camera_position += camera_direction;
+		camera_position += camera_direction * camera_movement_speed;
 	else if (key == GLFW_KEY_S)
-		camera_position -= camera_direction;
+		camera_position -= camera_direction * camera_movement_speed;
 
 	if (key == GLFW_KEY_A)
-		camera_position -= glm::cross(camera_direction, glm::vec3(0.0, 1.0, 0.0));
+		camera_position -= glm::cross(camera_direction, glm::vec3(0.0, 1.0, 0.0)) * camera_movement_speed;
 	else if (key == GLFW_KEY_D)
-		camera_position += glm::cross(camera_direction, glm::vec3(0.0, 1.0, 0.0));
+		camera_position += glm::cross(camera_direction, glm::vec3(0.0, 1.0, 0.0)) * camera_movement_speed;
 
 	if (key == GLFW_KEY_B && action == GLFW_PRESS)
 		scene_buildings.push_back(Building(programme_id));

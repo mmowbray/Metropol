@@ -63,14 +63,14 @@ void Tree::addBush(glm::vec3 sphere_centre, int radius) {
 
 void Tree::recursivelyGenerate(float length, glm::vec3 position, glm::vec3 orientation, int depth) {
 
-	if (depth == 3)
+	if (depth == 4)
 		return;
 
 	glm::vec3 end_point = position + normalize(orientation) * length;
 
 	fillPointsBetween2Points(position, end_point);
 	//addBush(end_point,  pow(9, 1/(depth+1))); //exponential
-	if ((depth + 1) == 1)
+	if (depth == 0)
 		addBush(end_point, 7); 
 	else
 		addBush(end_point, 15 * (9/(9*(depth+1)))); //linear
@@ -86,8 +86,9 @@ void Tree::recursivelyGenerate(float length, glm::vec3 position, glm::vec3 orien
 
 	/*new_orientation = glm::rotate(orientation, i * M_PI * 2, orientation );
 	recursivelyGenerate(length / 2, end_point, new_orientation, depth + 1);*/
-
-	recursivelyGenerate(length / 3, end_point, new_orientation1, depth + 1);
+	
+	if (rand() % 2 == 0)
+		recursivelyGenerate(length / 3, end_point, new_orientation1, depth + 1);
 
 	glm::vec4 temp2 = glm::vec4(new_orientation1, 1.0);
 	temp2 = glm::rotate(glm::mat4(), float(1.0/3.0 * M_PI * 2.0f), orientation) * temp2;
@@ -97,7 +98,8 @@ void Tree::recursivelyGenerate(float length, glm::vec3 position, glm::vec3 orien
 	new_orientation2.y = temp2.y;
 	new_orientation2.z = temp2.z;
 
-	recursivelyGenerate(length / 3, end_point, new_orientation2, depth + 1);
+	if (rand() % 2 == 0)
+		recursivelyGenerate(length / 3, end_point, new_orientation2, depth + 1);
 
 	temp2 = glm::vec4(new_orientation1, 1.0);
 	temp2 = glm::rotate(glm::mat4(), float(2.0 / 3.0 * M_PI * 2.0f), orientation) * temp2;
@@ -107,7 +109,8 @@ void Tree::recursivelyGenerate(float length, glm::vec3 position, glm::vec3 orien
 	new_orientation3.y = temp2.y;
 	new_orientation3.z = temp2.z;
 
-	recursivelyGenerate(length / 3, end_point, new_orientation3, depth + 1);
+	if(rand() % 2 == 0)
+		recursivelyGenerate(length / 3, end_point, new_orientation3, depth + 1);
 
 }
 
@@ -170,22 +173,33 @@ Tree::Tree(GLuint programme_id)
 	model_matrix_id = glGetUniformLocation(programme_id, "model_matrix");
 	vox_colour_vec3_id = glGetUniformLocation(programme_id, "voxel_Colour");
 
-	position.x = -rand() % 200;
-	position.y = -0.5f;
-	position.z = -rand() % 200;
+	int xPos = rand() % 160 + 30;
+	int zPos = rand() % 160 + 30;
 
-	int colorType = rand() % 3;
+	position.x = -1 * xPos;
+	position.y = -0.5f;
+	position.z = -1 * zPos;
+
+	printf("XPos: %f, ZPos: %f\n", position.x, position.z);
+
+	int colorType = rand() % 5;
 
 	switch (colorType)
 	{
 	case 0:
-		color = glm::vec3(0.2, 0.5, 0.2); //dark grey
+		color = glm::vec3(0.2, 0.5, 0.2); //green1
 		break;
 	case 1:
-		color = glm::vec3(0.4, 0.7, 0.1); //light grey
+		color = glm::vec3(0.4, 0.7, 0.1); //green2
 		break;
 	case 2:
-		color = glm::vec3(0.2, 0.9, 0.23); //brown
+		color = glm::vec3(0.2, 0.9, 0.23); //green3
+		break;
+	case 3:
+		color = glm::vec3(0.96, 0.72, 0.0); //autumn orange
+		break;
+	case 4:
+		color = glm::vec3(0.69, 0.13, 0.13); //autumn red
 		break;
 	default:
 		break;

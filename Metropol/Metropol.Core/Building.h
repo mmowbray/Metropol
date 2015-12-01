@@ -31,4 +31,7 @@ private:
 	vector<GLfloat> points;
 	GLuint buildingVBO;
 	GLuint model_matrix_id;
+	int height;
+	int depth;
+	int width;
 };
