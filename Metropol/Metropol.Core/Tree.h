@@ -27,6 +27,7 @@ public:
 	void insertVoxel(glm::vec3 point);
 	void fillPointsBetween2Points(glm::vec3 p1, glm::vec3 p2);
 	void recursivelyGenerate(float length, glm::vec3 position, glm::vec3 orientation, int depth);
+	void addBush(glm::vec3 sphere_centre, int size);
 private:
 	std::vector<vector<vector<GLint>>> space;
 	glm::vec3 position;

@@ -33,10 +33,32 @@ void Tree::fillPointsBetween2Points(glm::vec3 p1, glm::vec3 p2) {
 	glm::vec3 currentPosition = p1;
 
 	while (glm::distance(currentPosition, p2) > 2.0f ) {
-
 		insertVoxel(currentPosition);
 		currentPosition += direction;
+	}
 
+}
+
+void Tree::addBush(glm::vec3 sphere_centre, int radius) {
+
+
+
+	for (int x = 0; x < 100; x++)
+	{
+		for (int z = 0; z < 100; z++)
+		{
+			for (int y = 0; y < 100; y++)
+			{
+
+
+				glm::vec3 current_pos = glm::vec3(x, y, z);
+				if (pow((current_pos.x - sphere_centre.x), 2) + pow((current_pos.y - sphere_centre.y), 2) + pow((current_pos.z - sphere_centre.z), 2) - pow(radius, 2) < 10.0)
+				{
+					insertVoxel(current_pos);
+				}
+
+			}
+		}
 	}
 
 }
@@ -49,6 +71,11 @@ void Tree::recursivelyGenerate(float length, glm::vec3 position, glm::vec3 orien
 	glm::vec3 end_point = position + normalize(orientation) * length;
 
 	fillPointsBetween2Points(position, end_point);
+	//addBush(end_point,  pow(9, 1/(depth+1))); //exponential
+	if ((depth + 1) == 1)
+		addBush(end_point, 7); 
+	else
+		addBush(end_point, 15 * (9/(9*(depth+1)))); //linear
 
 	glm::vec3 new_orientation1 = orientation;
 
@@ -62,7 +89,7 @@ void Tree::recursivelyGenerate(float length, glm::vec3 position, glm::vec3 orien
 	/*new_orientation = glm::rotate(orientation, i * M_PI * 2, orientation );
 	recursivelyGenerate(length / 2, end_point, new_orientation, depth + 1);*/
 
-	recursivelyGenerate(length / 2, end_point, new_orientation1, depth + 1);
+	recursivelyGenerate(length / 3, end_point, new_orientation1, depth + 1);
 
 	glm::vec4 temp2 = glm::vec4(new_orientation1, 1.0);
 	temp2 = glm::rotate(glm::mat4(), float(1.0/3.0 * M_PI * 2.0f), orientation) * temp2;
@@ -72,7 +99,7 @@ void Tree::recursivelyGenerate(float length, glm::vec3 position, glm::vec3 orien
 	new_orientation2.y = temp2.y;
 	new_orientation2.z = temp2.z;
 
-	recursivelyGenerate(length / 2, end_point, new_orientation2, depth + 1);
+	recursivelyGenerate(length / 3, end_point, new_orientation2, depth + 1);
 
 	temp2 = glm::vec4(new_orientation1, 1.0);
 	temp2 = glm::rotate(glm::mat4(), float(2.0 / 3.0 * M_PI * 2.0f), orientation) * temp2;
@@ -82,7 +109,7 @@ void Tree::recursivelyGenerate(float length, glm::vec3 position, glm::vec3 orien
 	new_orientation3.y = temp2.y;
 	new_orientation3.z = temp2.z;
 
-	recursivelyGenerate(length / 2, end_point, new_orientation3, depth + 1);
+	recursivelyGenerate(length / 3, end_point, new_orientation3, depth + 1);
 
 }
 
