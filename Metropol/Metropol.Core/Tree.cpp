@@ -50,56 +50,28 @@ void Tree::addBush(glm::vec3 sphere_centre, int radius) {
 	}
 }
 
-void Tree::recursivelyGenerate(float length, glm::vec3 position, glm::vec3 orientation, int depth) {
+void Tree::recursivelyGenerate(float length, glm::vec3 start_point, glm::vec3 orientation, int depth) {
 
 	if (depth == 4)
 		return;
 
-	glm::vec3 end_point = position + normalize(orientation) * length;
+	glm::vec3 end_point = start_point + normalize(orientation) * length;
 
-	fillPointsBetween2Points(position, end_point);
-	//addBush(end_point,  pow(9, 1/(depth+1))); //exponential
+	fillPointsBetween2Points(start_point, end_point);
+
 	if (depth == 0)
-		addBush(end_point, 7); 
+		addBush(end_point, 10); 
 	else
-		addBush(end_point, 15 * (9/(9*(depth+1)))); //linear
+		addBush(end_point, 15 * (9/(9*(depth+1))));
 
-	glm::vec3 new_orientation1 = orientation;
+	glm::vec3 new_orientation = glm::rotate(orientation, float(M_PI/3.0), glm::cross(orientation, glm::rotateX(orientation, float(M_PI/2))));
 
-	glm::vec4 temp = glm::vec4(new_orientation1, 1.0);
-	temp = glm::rotate(glm::mat4(), float(M_PI/3), glm::cross(orientation, glm::vec3(1.0, 2.0, 5.0))) * temp;
-
-	new_orientation1.x = temp.x;
-	new_orientation1.y = temp.y;
-	new_orientation1.z = temp.z;
-
-	/*new_orientation = glm::rotate(orientation, i * M_PI * 2, orientation );
-	recursivelyGenerate(length / 2, end_point, new_orientation, depth + 1);*/
-	
-	if (rand() % 2 == 0)
-		recursivelyGenerate(length / 3, end_point, new_orientation1, depth + 1);
-
-	glm::vec4 temp2 = glm::vec4(new_orientation1, 1.0);
-	temp2 = glm::rotate(glm::mat4(), float(1.0/3.0 * M_PI * 2.0f), orientation) * temp2;
-
-	glm::vec3 new_orientation2;
-	new_orientation2.x = temp2.x;
-	new_orientation2.y = temp2.y;
-	new_orientation2.z = temp2.z;
-
-	if (rand() % 2 == 0)
-		recursivelyGenerate(length / 3, end_point, new_orientation2, depth + 1);
-
-	temp2 = glm::vec4(new_orientation1, 1.0);
-	temp2 = glm::rotate(glm::mat4(), float(2.0 / 3.0 * M_PI * 2.0f), orientation) * temp2;
-
-	glm::vec3 new_orientation3;
-	new_orientation3.x = temp2.x;
-	new_orientation3.y = temp2.y;
-	new_orientation3.z = temp2.z;
-
-	if(rand() % 2 == 0)
-		recursivelyGenerate(length / 3, end_point, new_orientation3, depth + 1);
+	for (int i = 0; i < 3; i++)
+	{
+		new_orientation = glm::rotate(new_orientation, float(2 * M_PI / 3), orientation);
+		if (rand() % 2 == 0)
+			recursivelyGenerate(length / 1.1, end_point, new_orientation, depth + 1);
+	}
 
 }
 
