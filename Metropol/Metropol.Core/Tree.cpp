@@ -220,15 +220,15 @@ void Tree::recursivelyGenerate(float length, glm::vec3 start_point, glm::vec3 or
 
 	if (depth == 0)
 		addBush(end_point, 10); 
-	else
-		addBush(end_point, 15 * (9/(9*(depth+1))));
+	else if (rand() % 2 == 1)
+		addBush(end_point, 5.0f / depth);
 
 	glm::vec3 new_orientation = glm::rotate(orientation, float(M_PI/3.0), glm::cross(orientation, glm::rotateX(orientation, float(M_PI/2))));
 
 	for (int i = 0; i < 3; i++)
 	{
 		new_orientation = glm::rotate(new_orientation, float(2 * M_PI / 3), orientation);
-		//if (rand() % 2 == 0)
+		if (rand() % 2 == 1)
 			recursivelyGenerate(length / 1.1, end_point, new_orientation, depth + 1);
 	}
 
