@@ -14,9 +14,9 @@ void Tree::insertVoxel(glm::vec3 point) {
 	int y_index = static_cast<int>(point.y);
 	int z_index = static_cast<int>(point.z);
 
-	points.push_back(x_index);
-	points.push_back(y_index);
-	points.push_back(z_index);
+	//points.push_back(x_index);
+	//points.push_back(y_index);
+	//points.push_back(z_index);
 
 }
 
@@ -137,7 +137,7 @@ void Tree::draw()
 	glBindBuffer(GL_ARRAY_BUFFER, treeVBO);
 	glVertexAttribPointer(0, 3, GL_INT, GL_FALSE, 0, 0);
 	glDrawArrays(
-		GL_POINTS,
+		GL_TRIANGLES,
 		0,
 		points.size()
 	);

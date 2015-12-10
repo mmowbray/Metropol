@@ -6,6 +6,62 @@ Building::Building()
 	
 }
 
+void Building::addPointToVBO(glm::vec3 centre)
+{
+	float width = 2.0f;
+
+	front_vertices.push_back(centre.x - width);
+	front_vertices.push_back(centre.y - width);
+	front_vertices.push_back(centre.z - width);
+
+	front_vertices.push_back(centre.x + width);
+	front_vertices.push_back(centre.y - width);
+	front_vertices.push_back(centre.z - width);
+
+	front_vertices.push_back(centre.x + width);
+	front_vertices.push_back(centre.y + width);
+	front_vertices.push_back(centre.z - width);
+
+	front_vertices.push_back(centre.x + width);
+	front_vertices.push_back(centre.y + width);
+	front_vertices.push_back(centre.z - width);
+
+	front_vertices.push_back(centre.x - width);
+	front_vertices.push_back(centre.y + width);
+	front_vertices.push_back(centre.z - width);
+
+	front_vertices.push_back(centre.x - width);
+	front_vertices.push_back(centre.y - width);
+	front_vertices.push_back(centre.z - width);
+
+	//back
+
+	back_vertices.push_back(centre.x - width);
+	back_vertices.push_back(centre.y - width);
+	back_vertices.push_back(centre.z + width);
+
+	back_vertices.push_back(centre.x + width);
+	back_vertices.push_back(centre.y - width);
+	back_vertices.push_back(centre.z + width);
+
+	back_vertices.push_back(centre.x + width);
+	back_vertices.push_back(centre.y + width);
+	back_vertices.push_back(centre.z + width);
+
+	back_vertices.push_back(centre.x + width);
+	back_vertices.push_back(centre.y + width);
+	back_vertices.push_back(centre.z + width);
+
+	back_vertices.push_back(centre.x - width);
+	back_vertices.push_back(centre.y + width);
+	back_vertices.push_back(centre.z + width);
+
+	back_vertices.push_back(centre.x - width);
+	back_vertices.push_back(centre.y - width);
+	back_vertices.push_back(centre.z + width);
+
+}
+
 Building::Building(GLuint programme_id)
 {
 	int width = rand() % 20 + 10;
@@ -21,27 +77,31 @@ Building::Building(GLuint programme_id)
 
 				if (x == 0 || y == 0 || z == 0 || x == width - 1 || y == height - 1 || z == depth - 1)
 				{
-					points.push_back(x);
-					points.push_back(y);
-					points.push_back(z);
+					addPointToVBO(glm::vec3(x, y, z));
 				}
 
 			}
 		}
 	}
 
-	glGenBuffers(1, &buildingVBO); //generate 1 VBO for the building vertices
-	glBindBuffer(GL_ARRAY_BUFFER, buildingVBO);
-	glBufferData(GL_ARRAY_BUFFER, points.size() * sizeof(GLfloat), &points.front(), GL_STATIC_DRAW);
+	glGenBuffers(1, &front_vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, front_vbo);
+	glBufferData(GL_ARRAY_BUFFER, front_vertices.size() * sizeof(GLfloat), &front_vertices.front(), GL_STATIC_DRAW);
+
+	glGenBuffers(1, &back_vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, back_vbo);
+	glBufferData(GL_ARRAY_BUFFER, back_vertices.size() * sizeof(GLfloat), &back_vertices.front(), GL_STATIC_DRAW);
+
 	model_matrix_id = glGetUniformLocation(programme_id, "model_matrix");
 	vox_colour_vec3_id = glGetUniformLocation(programme_id, "voxel_Colour");
+	norm_vec3_id = glGetUniformLocation(programme_id, "voxel_Normal");
 
 	int xPos = rand() % (200 - width) + width;
 	int zPos = rand() % (200 - depth) + depth;
 
-	position.x = -1 * xPos;
+	position.x = -xPos;
 	position.y = 0.5f;
-	position.z = -1 * zPos;
+	position.z = -zPos;
 	
 	int colorType = rand() % 4;
 
@@ -75,12 +135,16 @@ void Building::draw()
 
 	glm::mat4 position_matrix = glm::translate(position);
 	glUniformMatrix4fv(model_matrix_id, 1, GL_FALSE, glm::value_ptr(position_matrix));
-	glBindBuffer(GL_ARRAY_BUFFER, buildingVBO);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	glDrawArrays(
-		GL_POINTS,
-		0,
-		points.size()
-	);
 
+	glUniform3f(norm_vec3_id, 0.0f, 0.0f, -1.0f);
+
+	glBindBuffer(GL_ARRAY_BUFFER, front_vbo);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glDrawArrays(GL_TRIANGLES, 0, front_vertices.size());
+
+	glUniform3f(norm_vec3_id, 0.0f, 0.0f, 1.0f);
+
+	glBindBuffer(GL_ARRAY_BUFFER, back_vbo);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glDrawArrays(GL_TRIANGLES, 0, back_vertices.size());
 }

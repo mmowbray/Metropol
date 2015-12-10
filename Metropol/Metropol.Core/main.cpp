@@ -49,6 +49,7 @@ GLuint view_matrix_id = 0;
 GLuint proj_matrix_id = 0;
 GLuint vox_colour_vec3_id = 0;
 GLuint camera_position_vec3_id = 0;
+GLuint norm_vec3_id = 0;
 
 glm::mat4 model_matrix;
 glm::mat4 proj_matrix;
@@ -317,6 +318,7 @@ GLuint loadShaders(std::string vertex_shader_path, std::string fragment_shader_p
 	proj_matrix_id = glGetUniformLocation(programme_id, "proj_matrix");
 	vox_colour_vec3_id = glGetUniformLocation(programme_id, "voxel_Colour");
 	camera_position_vec3_id = glGetUniformLocation(programme_id, "camera_position");
+	norm_vec3_id = glGetUniformLocation(programme_id, "voxel_Normal");
 
 	return programme_id;
 }
@@ -397,7 +399,9 @@ int main() {
 		glUniformMatrix4fv(view_matrix_id, 1, GL_FALSE, glm::value_ptr(view_matrix));
 		glUniformMatrix4fv(proj_matrix_id, 1, GL_FALSE, glm::value_ptr(proj_matrix));
 
+		glUniform3f(camera_position_vec3_id, camera_position.x, camera_position.y, camera_position.z);
 		glUniform3f(vox_colour_vec3_id, terrain_colour.r, terrain_colour.g, terrain_colour.b);
+		glUniform3f(norm_vec3_id, 0.0f, 1.0f, 0.0f);
 
 		glBindBuffer(GL_ARRAY_BUFFER, terrain_vertices_vbo);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
@@ -410,7 +414,7 @@ int main() {
 
 		for (int i = 0; i < scene_buildings.size(); i++)
 		{
-			//scene_buildings[i].draw();
+			scene_buildings[i].draw();
 		}
 
 		for (int i = 0; i < scene_trees.size(); i++)
