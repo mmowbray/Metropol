@@ -184,7 +184,7 @@ void Tree::fillPointsBetween2Points(glm::vec3 p1, glm::vec3 p2) {
 	glm::vec3 direction = glm::normalize(p2 - p1);
 	glm::vec3 currentPosition = p1;
 
-	while (glm::distance(currentPosition, p2) > 4.0f ) {
+	while (glm::distance(currentPosition, p2) > 1.0f ) {
 		insertVoxel(currentPosition);
 		currentPosition += direction;
 	}
@@ -200,7 +200,7 @@ void Tree::addBush(glm::vec3 sphere_centre, int radius) {
 			for (int y = sphere_centre.y - radius; y <= sphere_centre.y + radius; y++)
 			{
 				glm::vec3 current_pos = glm::vec3(x, y, z);
-				if (pow((current_pos.x - sphere_centre.x), 2) + pow((current_pos.y - sphere_centre.y), 2) + pow((current_pos.z - sphere_centre.z), 2) - pow(radius, 2) < 10.0)
+				if (pow((current_pos.x - sphere_centre.x), 2) + pow((current_pos.y - sphere_centre.y), 2) + pow((current_pos.z - sphere_centre.z), 2) - pow(radius, 2) < 5.0)
 				{
 					insertVoxel(current_pos);
 				}
@@ -221,7 +221,7 @@ void Tree::recursivelyGenerate(float length, glm::vec3 start_point, glm::vec3 or
 	if (depth == 0)
 		addBush(end_point, 10); 
 	else if (rand() % 2 == 1)
-		addBush(end_point, 5.0f / depth);
+		addBush(end_point, 1.0f / depth);
 
 	glm::vec3 new_orientation = glm::rotate(orientation, float(M_PI/3.0), glm::cross(orientation, glm::rotateX(orientation, float(M_PI/2))));
 
