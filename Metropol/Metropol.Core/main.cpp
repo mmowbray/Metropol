@@ -37,6 +37,7 @@ using namespace std;
 #define M_PI 3.14159265358979323846264338327950288
 
 GLFWwindow* window = 0x00;
+const int DEFAULT_SCREEN_WIDTH = 1280, DEFAULT_SCREEN_HEIGHT = 720;
 
 GLuint shader_programme = 0;
 GLuint programme_id;
@@ -134,12 +135,12 @@ Updates the vieport and perspective matrix when the window is resized.
 @return void.
 */
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+void framebuffer_size_callback(GLFWwindow* window, int new_screen_width, int new_screen_height)
 {
-	glViewport(0, 0, width, height); //update the viewport on window resize
+	glViewport(0, 0, new_screen_width, new_screen_height); //update the viewport on window resize
 
 	// Update the Projection matrix after a window resize event
-	proj_matrix = glm::perspective(45.0f, (float)width / (float)height, 0.1f, 500.0f);
+	proj_matrix = glm::perspective(45.0f, float(new_screen_width) / float(new_screen_height), 0.1f, 500.0f);
 }
 
 /**
@@ -186,7 +187,7 @@ bool initialize() {
 	camera_position = glm::vec3(0.0f, 10.0f, 0.0f);
 	camera_direction= glm::vec3(0.0f, 0.0f, -1.0);
 
-	proj_matrix = glm::perspective(45.0f, 1280.0f / 720.0f, 0.1f, 100.0f);
+	proj_matrix = glm::perspective(45.0f, float(DEFAULT_SCREEN_WIDTH) / float(DEFAULT_SCREEN_HEIGHT), 0.1f, 500.0f);
 
 	return true;
 }
