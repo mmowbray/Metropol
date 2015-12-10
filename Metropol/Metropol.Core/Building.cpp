@@ -12,38 +12,23 @@ Building::Building(GLuint programme_id)
 	int height = rand() % 90 + 20;
 	int depth = rand() % 20 + 10;
 
-	/*if (rand() % 2 == 1) //created squashed cylinder building
+	for (int x = 0; x < width; x++)
 	{
-		for (int i = 0; i < height; i++)
+		for (int z = 0; z < depth; z++)
 		{
-			for (float theta = 0; theta < 2 * M_PI; theta += M_PI / 180)
+			for (int y = 0; y < height; y++)
 			{
-				points.push_back(width*cos(theta));
-				points.push_back(i);
-				points.push_back(height*sin(theta));
+
+				if (x == 0 || y == 0 || z == 0 || x == width - 1 || y == height - 1 || z == depth - 1)
+				{
+					points.push_back(x);
+					points.push_back(y);
+					points.push_back(z);
+				}
+
 			}
 		}
 	}
-	else //create orthogonal building
-	{*/
-		for (int x = 0; x < width; x++)
-		{
-			for (int z = 0; z < depth; z++)
-			{
-				for (int y = 0; y < height; y++)
-				{
-
-					if (x == 0 || y == 0 || z == 0 || x == width - 1 || y == height - 1 || z == depth - 1)
-					{
-						points.push_back(x);
-						points.push_back(y);
-						points.push_back(z);
-					}
-
-				}
-			}
-		}
-	//}
 
 	glGenBuffers(1, &buildingVBO); //generate 1 VBO for the building vertices
 	glBindBuffer(GL_ARRAY_BUFFER, buildingVBO);
