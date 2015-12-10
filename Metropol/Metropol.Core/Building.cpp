@@ -10,6 +10,8 @@ void Building::addPointToVBO(glm::vec3 centre)
 {
 	float width = 2.0f;
 
+	//front
+
 	front_vertices.push_back(centre.x - width);
 	front_vertices.push_back(centre.y - width);
 	front_vertices.push_back(centre.z - width);
@@ -60,6 +62,78 @@ void Building::addPointToVBO(glm::vec3 centre)
 	back_vertices.push_back(centre.y - width);
 	back_vertices.push_back(centre.z + width);
 
+	//left
+
+	left_vertices.push_back(centre.x - width);
+	left_vertices.push_back(centre.y - width);
+	left_vertices.push_back(centre.z + width);
+
+	left_vertices.push_back(centre.x - width);
+	left_vertices.push_back(centre.y - width);
+	left_vertices.push_back(centre.z - width);
+
+	left_vertices.push_back(centre.x - width);
+	left_vertices.push_back(centre.y + width);
+	left_vertices.push_back(centre.z - width);
+
+	left_vertices.push_back(centre.x - width);
+	left_vertices.push_back(centre.y + width);
+	left_vertices.push_back(centre.z + width);
+
+	//right
+
+	right_vertices.push_back(centre.x + width);
+	right_vertices.push_back(centre.y - width);
+	right_vertices.push_back(centre.z + width);
+
+	right_vertices.push_back(centre.x + width);
+	right_vertices.push_back(centre.y - width);
+	right_vertices.push_back(centre.z - width);
+
+	right_vertices.push_back(centre.x + width);
+	right_vertices.push_back(centre.y + width);
+	right_vertices.push_back(centre.z - width);
+
+	right_vertices.push_back(centre.x + width);
+	right_vertices.push_back(centre.y + width);
+	right_vertices.push_back(centre.z + width);
+
+	//top
+
+	top_vertices.push_back(centre.x - width);
+	top_vertices.push_back(centre.y + width);
+	top_vertices.push_back(centre.z + width);
+
+	top_vertices.push_back(centre.x - width);
+	top_vertices.push_back(centre.y + width);
+	top_vertices.push_back(centre.z- width);
+
+	top_vertices.push_back(centre.x + width);
+	top_vertices.push_back(centre.y + width);
+	top_vertices.push_back(centre.z - width);
+
+	top_vertices.push_back(centre.x + width);
+	top_vertices.push_back(centre.y + width);
+	top_vertices.push_back(centre.z + width);
+
+	//bottom
+
+	bottom_vertices.push_back(centre.x - width);
+	bottom_vertices.push_back(centre.y - width);
+	bottom_vertices.push_back(centre.z + width);
+
+	bottom_vertices.push_back(centre.x - width);
+	bottom_vertices.push_back(centre.y - width);
+	bottom_vertices.push_back(centre.z - width);
+
+	bottom_vertices.push_back(centre.x + width);
+	bottom_vertices.push_back(centre.y - width);
+	bottom_vertices.push_back(centre.z - width);
+
+	bottom_vertices.push_back(centre.x + width);
+	bottom_vertices.push_back(centre.y - width);
+	bottom_vertices.push_back(centre.z + width);
+
 }
 
 Building::Building(GLuint programme_id)
@@ -91,6 +165,22 @@ Building::Building(GLuint programme_id)
 	glGenBuffers(1, &back_vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, back_vbo);
 	glBufferData(GL_ARRAY_BUFFER, back_vertices.size() * sizeof(GLfloat), &back_vertices.front(), GL_STATIC_DRAW);
+
+	glGenBuffers(1, &left_vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, left_vbo);
+	glBufferData(GL_ARRAY_BUFFER, left_vertices.size() * sizeof(GLfloat), &left_vertices.front(), GL_STATIC_DRAW);
+
+	glGenBuffers(1, &right_vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, right_vbo);
+	glBufferData(GL_ARRAY_BUFFER, right_vertices.size() * sizeof(GLfloat), &right_vertices.front(), GL_STATIC_DRAW);
+
+	glGenBuffers(1, &top_vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, top_vbo);
+	glBufferData(GL_ARRAY_BUFFER, top_vertices.size() * sizeof(GLfloat), &top_vertices.front(), GL_STATIC_DRAW);
+
+	glGenBuffers(1, &bottom_vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, bottom_vbo);
+	glBufferData(GL_ARRAY_BUFFER, bottom_vertices.size() * sizeof(GLfloat), &bottom_vertices.front(), GL_STATIC_DRAW);
 
 	model_matrix_id = glGetUniformLocation(programme_id, "model_matrix");
 	vox_colour_vec3_id = glGetUniformLocation(programme_id, "voxel_Colour");
@@ -147,4 +237,28 @@ void Building::draw()
 	glBindBuffer(GL_ARRAY_BUFFER, back_vbo);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 	glDrawArrays(GL_TRIANGLES, 0, back_vertices.size());
+
+	glUniform3f(norm_vec3_id, -1.0f, 0.0f, 0.0f);
+
+	glBindBuffer(GL_ARRAY_BUFFER, left_vbo);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glDrawArrays(GL_TRIANGLES, 0, left_vertices.size());
+
+	glUniform3f(norm_vec3_id, 1.0f, 0.0f, 1.0f);
+
+	glBindBuffer(GL_ARRAY_BUFFER, right_vbo);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glDrawArrays(GL_TRIANGLES, 0, right_vertices.size());
+
+	glUniform3f(norm_vec3_id, 0.0f, 1.0f, -1.0f);
+
+	glBindBuffer(GL_ARRAY_BUFFER, top_vbo);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glDrawArrays(GL_TRIANGLES, 0, top_vertices.size());
+
+	glUniform3f(norm_vec3_id, 0.0f, -1.0f, 1.0f);
+
+	glBindBuffer(GL_ARRAY_BUFFER, bottom_vbo);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glDrawArrays(GL_TRIANGLES, 0, bottom_vertices.size());
 }
