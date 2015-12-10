@@ -337,14 +337,29 @@ int main() {
 
 	int terrain_mesh_width = 400, terrain_mesh_height = 400; //terrain mesh dimensions
 
-	for (int y = 0; y < terrain_mesh_height; y++) {
-		for (int x = 0; x < terrain_mesh_width; x++) {
+	terrain_points.push_back(0.0f);
+	terrain_points.push_back(0.0f);
+	terrain_points.push_back(0.0f);
 
-			terrain_points.push_back(x);
-			terrain_points.push_back(y);
-			terrain_points.push_back(0.0f);
-		}
-	}
+	terrain_points.push_back(terrain_mesh_width);
+	terrain_points.push_back(0.0f);
+	terrain_points.push_back(0.0f);
+
+	terrain_points.push_back(terrain_mesh_height);
+	terrain_points.push_back(0.0f);
+	terrain_points.push_back(0.0f);
+
+	terrain_points.push_back(terrain_mesh_height);
+	terrain_points.push_back(0.0f);
+	terrain_points.push_back(0.0f);
+
+	terrain_points.push_back(0.0f);
+	terrain_points.push_back(terrain_mesh_height);
+	terrain_points.push_back(0.0f);
+
+	terrain_points.push_back(0.0f);
+	terrain_points.push_back(0.0f);
+	terrain_points.push_back(0.0f);
 
 	glGenBuffers(1, &terrain_vertices_vbo); //generate 1 VBO for the terrain vertices
 	glBindBuffer(GL_ARRAY_BUFFER, terrain_vertices_vbo);
@@ -388,19 +403,19 @@ int main() {
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
 		glDrawArrays(
-			GL_POINTS,
+			GL_TRIANGLES,
 			0,
-			terrain_mesh_width * terrain_mesh_height
+			6
 		);
 
 		for (int i = 0; i < scene_buildings.size(); i++)
 		{
-			scene_buildings[i].draw();
+			//scene_buildings[i].draw();
 		}
 
 		for (int i = 0; i < scene_trees.size(); i++)
 		{
-			scene_trees[i].draw();
+			//scene_trees[i].draw();
 		}
 
 		// update other events like input handling 
