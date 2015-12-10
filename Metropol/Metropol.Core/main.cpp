@@ -217,11 +217,10 @@ Loads the vertex and fragments shaders from text files and creates an OpenGL Pro
 @return the OpenGL Programme ID to be used.
 */
 
-GLuint loadShaders(std::string vertex_shader_path, std::string fragment_shader_path, std::string geometry_shader_path) {
+GLuint loadShaders(std::string vertex_shader_path, std::string fragment_shader_path) {
 	// Create the shaders
 	GLuint VertexShaderID = glCreateShader(GL_VERTEX_SHADER);
 	GLuint FragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
-	GLuint GeometryShaderID = glCreateShader(GL_GEOMETRY_SHADER);
 
 	// Read the Vertex Shader code from the file
 	std::string VertexShaderCode;
@@ -234,21 +233,6 @@ GLuint loadShaders(std::string vertex_shader_path, std::string fragment_shader_p
 	}
 	else {
 		printf("Impossible to open %s. Are you in the right directory ? Don't forget to read the FAQ !\n", vertex_shader_path.c_str());
-		getchar();
-		exit(-1);
-	}
-
-	// Read the Geometry Shader code from the file
-	std::string GeometryShaderCode;
-	std::ifstream GeometryShaderStream(geometry_shader_path, std::ios::in);
-	if (GeometryShaderStream.is_open()) {
-		std::string Line = "";
-		while (getline(GeometryShaderStream, Line))
-			GeometryShaderCode += "\n" + Line;
-		GeometryShaderStream.close();
-	}
-	else {
-		printf("Impossible to open %s. Are you in the right directory ? Don't forget to read the FAQ !\n", geometry_shader_path.c_str());
 		getchar();
 		exit(-1);
 	}
@@ -286,21 +270,6 @@ GLuint loadShaders(std::string vertex_shader_path, std::string fragment_shader_p
 		printf("%s\n", &VertexShaderErrorMessage[0]);
 	}
 
-	// Compile Geometry Shader
-	printf("Compiling shader : %s\n", geometry_shader_path.c_str());
-	char const * GeometrySourcePointer = GeometryShaderCode.c_str();
-	glShaderSource(GeometryShaderID, 1, &GeometrySourcePointer, nullptr);
-	glCompileShader(GeometryShaderID);
-
-	// Check Geometry Shader
-	glGetShaderiv(GeometryShaderID, GL_COMPILE_STATUS, &Result);
-	glGetShaderiv(GeometryShaderID, GL_INFO_LOG_LENGTH, &InfoLogLength);
-	if (InfoLogLength > 0) {
-		std::vector<char> GeometryShaderErrorMessage(InfoLogLength + 1);
-		glGetShaderInfoLog(GeometryShaderID, InfoLogLength, nullptr, &GeometryShaderErrorMessage[0]);
-		printf("%s\n", &GeometryShaderErrorMessage[0]);
-	}
-
 	// Compile Fragment Shader
 	printf("Compiling shader : %s\n", fragment_shader_path.c_str());
 	char const * FragmentSourcePointer = FragmentShaderCode.c_str();
@@ -320,7 +289,6 @@ GLuint loadShaders(std::string vertex_shader_path, std::string fragment_shader_p
 	printf("Linking program\n");
 	programme_id = glCreateProgram();
 	glAttachShader(programme_id, VertexShaderID);
-	glAttachShader(programme_id, GeometryShaderID);
 	glAttachShader(programme_id, FragmentShaderID);
 
 	glBindAttribLocation(programme_id, 0, "in_Position");
@@ -338,11 +306,9 @@ GLuint loadShaders(std::string vertex_shader_path, std::string fragment_shader_p
 	}
 
 	glDetachShader(programme_id, VertexShaderID);
-	glDetachShader(programme_id, GeometryShaderID);
 	glDetachShader(programme_id, FragmentShaderID);
 
 	glDeleteShader(VertexShaderID);
-	glDeleteShader(GeometryShaderID);
 	glDeleteShader(FragmentShaderID);
 
 	//The three variables below hold the id of each of the variables in the shader
@@ -384,7 +350,7 @@ int main() {
 	glBindBuffer(GL_ARRAY_BUFFER, terrain_vertices_vbo);
 	glBufferData(GL_ARRAY_BUFFER, terrain_points.size() * sizeof(GLfloat), &terrain_points.front(), GL_STATIC_DRAW);
 
-	shader_programme = loadShaders("vertex.shader", "fragment.shader", "geometry.shader");
+	shader_programme = loadShaders("vertex.shader", "fragment.shader");
 
 	GLint posAttrib = glGetAttribLocation(shader_programme, "in_Position"); //enable the position input to the shaders
 	glEnableVertexAttribArray(posAttrib);
