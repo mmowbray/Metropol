@@ -419,7 +419,7 @@ int main() {
 
 		for (int i = 0; i < scene_trees.size(); i++)
 		{
-			//scene_trees[i].draw();
+			scene_trees[i].draw();
 		}
 
 		// update other events like input handling 

@@ -32,9 +32,10 @@ public:
 private:
 	glm::vec3 color;
 	std::vector<vector<vector<GLint>>> space;
-	GLuint vox_colour_vec3_id;
+	GLuint vox_colour_vec3_id, norm_vec3_id;
 	glm::vec3 position;
 	vector<GLint> points;
-	GLuint treeVBO;
+	vector<GLfloat> left_vertices, right_vertices, top_vertices, bottom_vertices, front_vertices, back_vertices;
+	GLuint left_vbo, right_vbo, top_vbo, bottom_vbo, front_vbo, back_vbo;
 	GLuint model_matrix_id;
 };

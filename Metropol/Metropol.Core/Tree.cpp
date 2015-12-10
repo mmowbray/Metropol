@@ -8,15 +8,174 @@ Tree::Tree()
 
 }
 
-void Tree::insertVoxel(glm::vec3 point) {
+Tree::~Tree()
+{
 
-	int x_index = static_cast<int>(point.x);
-	int y_index = static_cast<int>(point.y);
-	int z_index = static_cast<int>(point.z);
+}
 
-	//points.push_back(x_index);
-	//points.push_back(y_index);
-	//points.push_back(z_index);
+void Tree::insertVoxel(glm::vec3 centre) {
+
+	centre.x = static_cast<int>(centre.x);
+	centre.y = static_cast<int>(centre.y);
+	centre.z = static_cast<int>(centre.z);
+
+	float width = 0.5f;
+
+	//front
+
+	front_vertices.push_back(centre.x - width);
+	front_vertices.push_back(centre.y - width);
+	front_vertices.push_back(centre.z - width);
+
+	front_vertices.push_back(centre.x + width);
+	front_vertices.push_back(centre.y - width);
+	front_vertices.push_back(centre.z - width);
+
+	front_vertices.push_back(centre.x + width);
+	front_vertices.push_back(centre.y + width);
+	front_vertices.push_back(centre.z - width);
+
+	front_vertices.push_back(centre.x + width);
+	front_vertices.push_back(centre.y + width);
+	front_vertices.push_back(centre.z - width);
+
+	front_vertices.push_back(centre.x - width);
+	front_vertices.push_back(centre.y + width);
+	front_vertices.push_back(centre.z - width);
+
+	front_vertices.push_back(centre.x - width);
+	front_vertices.push_back(centre.y - width);
+	front_vertices.push_back(centre.z - width);
+
+	//back
+
+	back_vertices.push_back(centre.x - width);
+	back_vertices.push_back(centre.y - width);
+	back_vertices.push_back(centre.z + width);
+
+	back_vertices.push_back(centre.x + width);
+	back_vertices.push_back(centre.y - width);
+	back_vertices.push_back(centre.z + width);
+
+	back_vertices.push_back(centre.x + width);
+	back_vertices.push_back(centre.y + width);
+	back_vertices.push_back(centre.z + width);
+
+	back_vertices.push_back(centre.x + width);
+	back_vertices.push_back(centre.y + width);
+	back_vertices.push_back(centre.z + width);
+
+	back_vertices.push_back(centre.x - width);
+	back_vertices.push_back(centre.y + width);
+	back_vertices.push_back(centre.z + width);
+
+	back_vertices.push_back(centre.x - width);
+	back_vertices.push_back(centre.y - width);
+	back_vertices.push_back(centre.z + width);
+
+	//left
+
+	left_vertices.push_back(centre.x - width);
+	left_vertices.push_back(centre.y - width);
+	left_vertices.push_back(centre.z + width);
+
+	left_vertices.push_back(centre.x - width);
+	left_vertices.push_back(centre.y - width);
+	left_vertices.push_back(centre.z - width);
+
+	left_vertices.push_back(centre.x - width);
+	left_vertices.push_back(centre.y + width);
+	left_vertices.push_back(centre.z - width);
+
+	left_vertices.push_back(centre.x - width);
+	left_vertices.push_back(centre.y - width);
+	left_vertices.push_back(centre.z + width);
+
+	left_vertices.push_back(centre.x - width);
+	left_vertices.push_back(centre.y + width);
+	left_vertices.push_back(centre.z + width);
+
+	left_vertices.push_back(centre.x - width);
+	left_vertices.push_back(centre.y + width);
+	left_vertices.push_back(centre.z - width);
+
+	//right
+
+	right_vertices.push_back(centre.x + width);
+	right_vertices.push_back(centre.y - width);
+	right_vertices.push_back(centre.z + width);
+
+	right_vertices.push_back(centre.x + width);
+	right_vertices.push_back(centre.y - width);
+	right_vertices.push_back(centre.z - width);
+
+	right_vertices.push_back(centre.x + width);
+	right_vertices.push_back(centre.y + width);
+	right_vertices.push_back(centre.z - width);
+
+	right_vertices.push_back(centre.x + width);
+	right_vertices.push_back(centre.y - width);
+	right_vertices.push_back(centre.z + width);
+
+	right_vertices.push_back(centre.x + width);
+	right_vertices.push_back(centre.y + width);
+	right_vertices.push_back(centre.z + width);
+
+	right_vertices.push_back(centre.x + width);
+	right_vertices.push_back(centre.y + width);
+	right_vertices.push_back(centre.z - width);
+
+	//top
+
+	top_vertices.push_back(centre.x - width);
+	top_vertices.push_back(centre.y + width);
+	top_vertices.push_back(centre.z - width);
+
+	top_vertices.push_back(centre.x + width);
+	top_vertices.push_back(centre.y + width);
+	top_vertices.push_back(centre.z - width);
+
+	top_vertices.push_back(centre.x + width);
+	top_vertices.push_back(centre.y + width);
+	top_vertices.push_back(centre.z + width);
+
+	top_vertices.push_back(centre.x - width);
+	top_vertices.push_back(centre.y + width);
+	top_vertices.push_back(centre.z - width);
+
+	top_vertices.push_back(centre.x - width);
+	top_vertices.push_back(centre.y + width);
+	top_vertices.push_back(centre.z + width);
+
+	top_vertices.push_back(centre.x + width);
+	top_vertices.push_back(centre.y + width);
+	top_vertices.push_back(centre.z + width);
+
+	//bottom
+
+	bottom_vertices.push_back(centre.x - width);
+	bottom_vertices.push_back(centre.y - width);
+	bottom_vertices.push_back(centre.z - width);
+
+	bottom_vertices.push_back(centre.x + width);
+	bottom_vertices.push_back(centre.y - width);
+	bottom_vertices.push_back(centre.z - width);
+
+	bottom_vertices.push_back(centre.x + width);
+	bottom_vertices.push_back(centre.y - width);
+	bottom_vertices.push_back(centre.z + width);
+
+	bottom_vertices.push_back(centre.x - width);
+	bottom_vertices.push_back(centre.y - width);
+	bottom_vertices.push_back(centre.z - width);
+
+	bottom_vertices.push_back(centre.x - width);
+	bottom_vertices.push_back(centre.y - width);
+	bottom_vertices.push_back(centre.z + width);
+
+	bottom_vertices.push_back(centre.x + width);
+	bottom_vertices.push_back(centre.y - width);
+	bottom_vertices.push_back(centre.z + width);
 
 }
 
@@ -34,11 +193,11 @@ void Tree::fillPointsBetween2Points(glm::vec3 p1, glm::vec3 p2) {
 
 void Tree::addBush(glm::vec3 sphere_centre, int radius) {
 
-	for (int x = 0; x < 100; x++)
+	for (int x = sphere_centre.x - radius; x <= sphere_centre.x + radius; x++)
 	{
-		for (int z = 0; z < 100; z++)
+		for (int z = sphere_centre.z - radius; z <= sphere_centre.z + radius; z++)
 		{
-			for (int y = 0; y < 100; y++)
+			for (int y = sphere_centre.y - radius; y <= sphere_centre.y + radius; y++)
 			{
 				glm::vec3 current_pos = glm::vec3(x, y, z);
 				if (pow((current_pos.x - sphere_centre.x), 2) + pow((current_pos.y - sphere_centre.y), 2) + pow((current_pos.z - sphere_centre.z), 2) - pow(radius, 2) < 10.0)
@@ -69,7 +228,7 @@ void Tree::recursivelyGenerate(float length, glm::vec3 start_point, glm::vec3 or
 	for (int i = 0; i < 3; i++)
 	{
 		new_orientation = glm::rotate(new_orientation, float(2 * M_PI / 3), orientation);
-		if (rand() % 2 == 0)
+		//if (rand() % 2 == 0)
 			recursivelyGenerate(length / 1.1, end_point, new_orientation, depth + 1);
 	}
 
@@ -86,17 +245,39 @@ Tree::Tree(GLuint programme_id)
 
 	recursivelyGenerate(100/5, startingPoint, startingOrientation, 0);
 
-	glGenBuffers(1, &treeVBO); //generate 1 VBO for the building vertices
-	glBindBuffer(GL_ARRAY_BUFFER, treeVBO);
-	glBufferData(GL_ARRAY_BUFFER, points.size() * sizeof(GLint), &points.front(), GL_STATIC_DRAW);
+	glGenBuffers(1, &front_vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, front_vbo);
+	glBufferData(GL_ARRAY_BUFFER, front_vertices.size() * sizeof(GLfloat), &front_vertices.front(), GL_STATIC_DRAW);
+
+	glGenBuffers(1, &back_vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, back_vbo);
+	glBufferData(GL_ARRAY_BUFFER, back_vertices.size() * sizeof(GLfloat), &back_vertices.front(), GL_STATIC_DRAW);
+
+	glGenBuffers(1, &left_vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, left_vbo);
+	glBufferData(GL_ARRAY_BUFFER, left_vertices.size() * sizeof(GLfloat), &left_vertices.front(), GL_STATIC_DRAW);
+
+	glGenBuffers(1, &right_vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, right_vbo);
+	glBufferData(GL_ARRAY_BUFFER, right_vertices.size() * sizeof(GLfloat), &right_vertices.front(), GL_STATIC_DRAW);
+
+	glGenBuffers(1, &top_vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, top_vbo);
+	glBufferData(GL_ARRAY_BUFFER, top_vertices.size() * sizeof(GLfloat), &top_vertices.front(), GL_STATIC_DRAW);
+
+	glGenBuffers(1, &bottom_vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, bottom_vbo);
+	glBufferData(GL_ARRAY_BUFFER, bottom_vertices.size() * sizeof(GLfloat), &bottom_vertices.front(), GL_STATIC_DRAW);
+
 	model_matrix_id = glGetUniformLocation(programme_id, "model_matrix");
 	vox_colour_vec3_id = glGetUniformLocation(programme_id, "voxel_Colour");
+	norm_vec3_id = glGetUniformLocation(programme_id, "voxel_Normal");
 
 	int xPos = rand() % 160 + 30;
 	int zPos = rand() % 160 + 30;
 
 	position.x = -1 * xPos;
-	position.y = -0.5f;
+	position.y = 5.0f;
 	position.z = -1 * zPos;
 
 	int colorType = rand() % 5;
@@ -123,22 +304,46 @@ Tree::Tree(GLuint programme_id)
 	}
 }
 
-Tree::~Tree()
-{
-
-}
-
 void Tree::draw()
 {
 	glUniform3f(vox_colour_vec3_id, color.r, color.g, color.b);
 
 	glm::mat4 position_matrix = glm::translate(position);
 	glUniformMatrix4fv(model_matrix_id, 1, GL_FALSE, glm::value_ptr(position_matrix));
-	glBindBuffer(GL_ARRAY_BUFFER, treeVBO);
-	glVertexAttribPointer(0, 3, GL_INT, GL_FALSE, 0, 0);
-	glDrawArrays(
-		GL_TRIANGLES,
-		0,
-		points.size()
-	);
+
+	glUniform3f(norm_vec3_id, 0.0f, 0.0f, -1.0f);
+
+	glBindBuffer(GL_ARRAY_BUFFER, front_vbo);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glDrawArrays(GL_TRIANGLES, 0, front_vertices.size());
+
+	glUniform3f(norm_vec3_id, 0.0f, 0.0f, 1.0f);
+
+	glBindBuffer(GL_ARRAY_BUFFER, back_vbo);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glDrawArrays(GL_TRIANGLES, 0, back_vertices.size());
+
+	glUniform3f(norm_vec3_id, -1.0f, 0.0f, 0.0f);
+
+	glBindBuffer(GL_ARRAY_BUFFER, left_vbo);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glDrawArrays(GL_TRIANGLES, 0, left_vertices.size());
+
+	glUniform3f(norm_vec3_id, 1.0f, 0.0f, 1.0f);
+
+	glBindBuffer(GL_ARRAY_BUFFER, right_vbo);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glDrawArrays(GL_TRIANGLES, 0, right_vertices.size());
+
+	glUniform3f(norm_vec3_id, 0.0f, 1.0f, -1.0f);
+
+	glBindBuffer(GL_ARRAY_BUFFER, top_vbo);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glDrawArrays(GL_TRIANGLES, 0, top_vertices.size());
+
+	glUniform3f(norm_vec3_id, 0.0f, -1.0f, 1.0f);
+
+	glBindBuffer(GL_ARRAY_BUFFER, bottom_vbo);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glDrawArrays(GL_TRIANGLES, 0, bottom_vertices.size());
 }

@@ -8,7 +8,7 @@ Building::Building()
 
 void Building::addPointToVBO(glm::vec3 centre)
 {
-	float width = 2.0f;
+	float width = 0.5f;
 
 	//front
 
@@ -77,8 +77,16 @@ void Building::addPointToVBO(glm::vec3 centre)
 	left_vertices.push_back(centre.z - width);
 
 	left_vertices.push_back(centre.x - width);
+	left_vertices.push_back(centre.y - width);
+	left_vertices.push_back(centre.z + width);
+
+	left_vertices.push_back(centre.x - width);
 	left_vertices.push_back(centre.y + width);
 	left_vertices.push_back(centre.z + width);
+
+	left_vertices.push_back(centre.x - width);
+	left_vertices.push_back(centre.y + width);
+	left_vertices.push_back(centre.z - width);
 
 	//right
 
@@ -95,18 +103,22 @@ void Building::addPointToVBO(glm::vec3 centre)
 	right_vertices.push_back(centre.z - width);
 
 	right_vertices.push_back(centre.x + width);
+	right_vertices.push_back(centre.y - width);
+	right_vertices.push_back(centre.z + width);
+
+	right_vertices.push_back(centre.x + width);
 	right_vertices.push_back(centre.y + width);
 	right_vertices.push_back(centre.z + width);
+
+	right_vertices.push_back(centre.x + width);
+	right_vertices.push_back(centre.y + width);
+	right_vertices.push_back(centre.z - width);
 
 	//top
 
 	top_vertices.push_back(centre.x - width);
 	top_vertices.push_back(centre.y + width);
-	top_vertices.push_back(centre.z + width);
-
-	top_vertices.push_back(centre.x - width);
-	top_vertices.push_back(centre.y + width);
-	top_vertices.push_back(centre.z- width);
+	top_vertices.push_back(centre.z - width);
 
 	top_vertices.push_back(centre.x + width);
 	top_vertices.push_back(centre.y + width);
@@ -116,11 +128,19 @@ void Building::addPointToVBO(glm::vec3 centre)
 	top_vertices.push_back(centre.y + width);
 	top_vertices.push_back(centre.z + width);
 
-	//bottom
+	top_vertices.push_back(centre.x - width);
+	top_vertices.push_back(centre.y + width);
+	top_vertices.push_back(centre.z - width);
 
-	bottom_vertices.push_back(centre.x - width);
-	bottom_vertices.push_back(centre.y - width);
-	bottom_vertices.push_back(centre.z + width);
+	top_vertices.push_back(centre.x - width);
+	top_vertices.push_back(centre.y + width);
+	top_vertices.push_back(centre.z + width);
+
+	top_vertices.push_back(centre.x + width);
+	top_vertices.push_back(centre.y + width);
+	top_vertices.push_back(centre.z + width);
+
+	//bottom
 
 	bottom_vertices.push_back(centre.x - width);
 	bottom_vertices.push_back(centre.y - width);
@@ -129,6 +149,18 @@ void Building::addPointToVBO(glm::vec3 centre)
 	bottom_vertices.push_back(centre.x + width);
 	bottom_vertices.push_back(centre.y - width);
 	bottom_vertices.push_back(centre.z - width);
+
+	bottom_vertices.push_back(centre.x + width);
+	bottom_vertices.push_back(centre.y - width);
+	bottom_vertices.push_back(centre.z + width);
+
+	bottom_vertices.push_back(centre.x - width);
+	bottom_vertices.push_back(centre.y - width);
+	bottom_vertices.push_back(centre.z - width);
+
+	bottom_vertices.push_back(centre.x - width);
+	bottom_vertices.push_back(centre.y - width);
+	bottom_vertices.push_back(centre.z + width);
 
 	bottom_vertices.push_back(centre.x + width);
 	bottom_vertices.push_back(centre.y - width);
