@@ -345,12 +345,12 @@ int main() {
 	terrain_points.push_back(0.0f);
 	terrain_points.push_back(0.0f);
 
+	terrain_points.push_back(terrain_mesh_width);
 	terrain_points.push_back(terrain_mesh_height);
-	terrain_points.push_back(0.0f);
 	terrain_points.push_back(0.0f);
 
+	terrain_points.push_back(terrain_mesh_width);
 	terrain_points.push_back(terrain_mesh_height);
-	terrain_points.push_back(0.0f);
 	terrain_points.push_back(0.0f);
 
 	terrain_points.push_back(0.0f);
@@ -405,7 +405,7 @@ int main() {
 		glDrawArrays(
 			GL_TRIANGLES,
 			0,
-			6
+			terrain_points.size()
 		);
 
 		for (int i = 0; i < scene_buildings.size(); i++)
