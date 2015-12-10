@@ -277,7 +277,7 @@ Tree::Tree(GLuint programme_id)
 	int zPos = rand() % 160 + 30;
 
 	position.x = -1 * xPos;
-	position.y = 5.0f;
+	position.y = 0.5f;
 	position.z = -1 * zPos;
 
 	int colorType = rand() % 5;

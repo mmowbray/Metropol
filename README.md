@@ -5,4 +5,4 @@ Metropol is a procedural voxel city generation program written in C++ using mode
 
 It features procedurally generated buildings and trees, with more to come!
 
-![screenshot 1](Screenshots/tree_2.png)
+![screenshot 1](Screenshots/tree_7.png)
