@@ -1,8 +1,8 @@
 #version 330
 
 uniform vec3 voxel_Colour;
-uniform vec3 camera_position;
 uniform vec3 voxel_Normal;
+uniform vec3 camera_position;
 
 in vec3 frag_Position;
 out vec4 frag_colour;

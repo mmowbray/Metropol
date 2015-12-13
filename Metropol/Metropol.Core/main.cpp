@@ -5,11 +5,9 @@ Purpose: Entry point of application.
 
 @author Patrick Soueida
 @author Maxwell Mowbray
-@version M0.1
 */
 
 #include "Building.h"
-#include <cstdlib>
 #include <ctime>
 
 #include "stdafx.h"
@@ -28,8 +26,6 @@ Purpose: Entry point of application.
 #include <vector>
 #include <string>
 #include <fstream>
-#include <algorithm>
-#include <iostream>
 #include "Tree.h"
 
 using namespace std;
@@ -317,8 +313,8 @@ GLuint loadShaders(std::string vertex_shader_path, std::string fragment_shader_p
 	view_matrix_id = glGetUniformLocation(programme_id, "view_matrix");
 	proj_matrix_id = glGetUniformLocation(programme_id, "proj_matrix");
 	vox_colour_vec3_id = glGetUniformLocation(programme_id, "voxel_Colour");
-	camera_position_vec3_id = glGetUniformLocation(programme_id, "camera_position");
 	norm_vec3_id = glGetUniformLocation(programme_id, "voxel_Normal");
+	camera_position_vec3_id = glGetUniformLocation(programme_id, "camera_position");
 
 	return programme_id;
 }
@@ -334,7 +330,6 @@ int main() {
 	glGenVertexArrays(1, &vao);	// Create Vertex Array Object
 	glBindVertexArray(vao); //and select it
 
-	std::vector<GLuint> terrain_indices;
 	std::vector<GLfloat> terrain_points;
 
 	int terrain_mesh_width = 400, terrain_mesh_height = 400; //terrain mesh dimensions
@@ -373,7 +368,6 @@ int main() {
 	glEnableVertexAttribArray(posAttrib);
 
 	glUseProgram(shader_programme);
-	glPointSize(4.0);
 	
 	glm::vec3 terrain_colour = glm::vec3(0.42);
 
@@ -409,7 +403,7 @@ int main() {
 		glDrawArrays(
 			GL_TRIANGLES,
 			0,
-			terrain_points.size()
+			terrain_points.size() / 3
 		);
 
 		for (int i = 0; i < scene_buildings.size(); i++)

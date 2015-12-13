@@ -236,11 +236,10 @@ void Tree::recursivelyGenerate(float length, glm::vec3 start_point, glm::vec3 or
 
 Tree::Tree(GLuint programme_id)
 {
-	int dimension = rand() % 60 + 15;
 
 	//put tree points
 
-	glm::vec3 startingPoint = glm::vec3(100 / 2, 0, 100 / 2); //rather use dimension here
+	glm::vec3 startingPoint = glm::vec3(100 / 2, 0, 100 / 2);
 	glm::vec3 startingOrientation = glm::vec3(0.0, 1.0, 0.0);
 
 	recursivelyGenerate(100/5, startingPoint, startingOrientation, 0);
