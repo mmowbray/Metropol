@@ -7,16 +7,14 @@ Purpose: Entry point of application.
 @author Maxwell Mowbray
 */
 
-#include "Building.h"
 #include <ctime>
-
 #include "stdafx.h"
 
 #include "..\glew\glew.h"	// include GL Extension Wrangler
 #include "..\glfw\glfw3.h"	// include GLFW helper library
 
 #include "glm.hpp"
-#include "transform.hpp"
+#include "gtx/transform.hpp"
 #include "gtc/matrix_transform.hpp"
 #include "gtc/type_ptr.hpp"
 
@@ -26,6 +24,7 @@ Purpose: Entry point of application.
 #include <vector>
 #include <string>
 #include <fstream>
+#include "Building.h"
 #include "Tree.h"
 
 using namespace std;
@@ -57,7 +56,7 @@ glm::vec3 camera_position, camera_direction;
 
 float camera_movement_speed = 5.0f;
 float old_mouse_y_pos, old_mouse_x_pos;
-float camera_psi = 0.0f, camera_theta = 0.0f;
+float camera_yaw = 0.0f, camera_pitch = 0.0f;
 
 std::vector<Building> scene_buildings;
 std::vector<Tree> scene_trees;
@@ -73,24 +72,23 @@ void cursor_callback(GLFWwindow* window, double xpos, double ypos) {
 	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
 
 		if (xpos < old_mouse_x_pos)
-			camera_psi -= M_PI / 200;
+			camera_yaw -= M_PI / 200;
 
 		if (xpos > old_mouse_x_pos)
-			camera_psi += M_PI / 200;
-
-		if (ypos > old_mouse_y_pos)
-			camera_theta -= M_PI / 200;
+			camera_yaw += M_PI / 200;
 
 		if (ypos < old_mouse_y_pos)
-			camera_theta += M_PI / 200;
+			camera_pitch -= M_PI / 200;
 
-		camera_theta = glm::clamp(double(camera_theta), (-0.99 * M_PI) / 2.0 ,( 0.99 * M_PI) / 2.0);
-		camera_direction = glm::normalize(glm::vec3(sin(camera_psi)*cos(camera_theta), sin(camera_theta), -cos(camera_psi)*cos(camera_theta)));
+		if (ypos > old_mouse_y_pos)
+			camera_pitch += M_PI / 200;
+
+		camera_pitch = glm::clamp(camera_pitch, float(-M_PI) / 2, float(M_PI) / 2);
+		camera_direction = glm::normalize(glm::vec3(cos(camera_pitch)*sin(-camera_yaw), sin(camera_pitch), cos(camera_pitch) * cos(camera_yaw)));
 	}
 
 	old_mouse_x_pos = xpos;
 	old_mouse_y_pos = ypos;
-
 }
 
 /**
@@ -108,9 +106,9 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		camera_position -= camera_direction * camera_movement_speed;
 
 	if (key == GLFW_KEY_A)
-		camera_position -= glm::cross(camera_direction, glm::vec3(0.0, 1.0, 0.0)) * camera_movement_speed;
+		camera_position -= glm::normalize(glm::cross(camera_direction, glm::vec3(0.0, 1.0, 0.0))) * camera_movement_speed;
 	else if (key == GLFW_KEY_D)
-		camera_position += glm::cross(camera_direction, glm::vec3(0.0, 1.0, 0.0)) * camera_movement_speed;
+		camera_position += glm::normalize(glm::cross(camera_direction, glm::vec3(0.0, 1.0, 0.0))) * camera_movement_speed;
 
 	if (key == GLFW_KEY_B && action == GLFW_PRESS)
 		scene_buildings.push_back(Building(programme_id));
@@ -376,12 +374,7 @@ int main() {
 		glClearColor(0.851f, 1.0f, 0.988f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		//update the camera matrix
-		view_matrix = glm::lookAt(
-			glm::vec3(camera_position),
-			glm::vec3(camera_position + camera_direction),
-			glm::vec3(0.0f, 1.0f, 0.0f)
-		);
+		view_matrix = glm::rotate(camera_pitch, glm::vec3(1,0,0)) * glm::rotate(camera_yaw, glm::vec3(0,1,0)) * translate(glm::mat4(1), camera_position);
 
 		glm::mat4 terrain_mesh_translate = glm::translate(glm::vec3(-(float)terrain_mesh_width / 2, -(float)terrain_mesh_height / 2, 0)); //center the terrain mesh
 		glm::mat4 terrain_mesh_rotate = glm::rotate(glm::mat4(), (float)M_PI / 2, glm::vec3(1.0f, 0.0f, 0.0f)); //rotate onto y = 0 plane
@@ -407,14 +400,10 @@ int main() {
 		);
 
 		for (int i = 0; i < scene_buildings.size(); i++)
-		{
 			scene_buildings[i].draw();
-		}
 
 		for (int i = 0; i < scene_trees.size(); i++)
-		{
 			scene_trees[i].draw();
-		}
 
 		// update other events like input handling 
 		glfwPollEvents();
