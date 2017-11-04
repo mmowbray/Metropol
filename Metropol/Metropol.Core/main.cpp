@@ -26,6 +26,7 @@ Purpose: Entry point of application.
 #include <fstream>
 #include "Building.h"
 #include "Tree.h"
+#include <algorithm>
 
 using namespace std;
 
@@ -59,7 +60,7 @@ float old_mouse_y_pos, old_mouse_x_pos;
 float camera_yaw = 0.0f, camera_pitch = 0.0f;
 
 std::vector<Building> scene_buildings;
-std::vector<Tree> scene_trees;
+std::vector<Tree*> scene_trees;
 
 /**
 Reacts to mouse input.
@@ -97,31 +98,45 @@ Reacts to user key input.
 @return void.
 */
 
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+void key_callback(GLFWwindow*, int key, int, int action, int)
 {
-
-	if (key == GLFW_KEY_W)
-		camera_position += camera_direction * camera_movement_speed;
-	else if (key == GLFW_KEY_S)
-		camera_position -= camera_direction * camera_movement_speed;
-
-	if (key == GLFW_KEY_A)
-		camera_position -= glm::normalize(glm::cross(camera_direction, glm::vec3(0.0, 1.0, 0.0))) * camera_movement_speed;
-	else if (key == GLFW_KEY_D)
-		camera_position += glm::normalize(glm::cross(camera_direction, glm::vec3(0.0, 1.0, 0.0))) * camera_movement_speed;
-
-	if (key == GLFW_KEY_B && action == GLFW_PRESS)
-		scene_buildings.push_back(Building(programme_id));
-
-	if (key == GLFW_KEY_T && action == GLFW_PRESS)
-		scene_trees.push_back(Tree(programme_id));
-
-	if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
+	switch(key)
 	{
-		scene_buildings.clear();
-		scene_trees.clear();
+	case GLFW_KEY_W:
+		camera_position += camera_direction * camera_movement_speed;
+		break;
+	case GLFW_KEY_S:
+		camera_position -= camera_direction * camera_movement_speed;
+		break;
+	case GLFW_KEY_A:
+		camera_position -= glm::normalize(glm::cross(camera_direction, glm::vec3(0.0, 1.0, 0.0))) * camera_movement_speed;
+		break;
+	case GLFW_KEY_D:
+		camera_position += glm::normalize(glm::cross(camera_direction, glm::vec3(0.0, 1.0, 0.0))) * camera_movement_speed;
+		break;
+	case GLFW_KEY_B:
+		if(action == GLFW_PRESS)
+			scene_buildings.push_back(Building(programme_id));
+		break;
+	case GLFW_KEY_T:
+		if (action == GLFW_PRESS)
+			scene_trees.push_back(new Tree(programme_id));
+		break;
+	case GLFW_KEY_BACKSPACE:
+		if (action == GLFW_PRESS)
+			scene_buildings.clear();
+
+			for (auto i = 0; i < scene_trees.size(); i++)
+				delete scene_trees[i];
+
+			scene_trees.clear();
+
+		break;
+	case GLFW_KEY_SPACE:
+		if (action == GLFW_PRESS && scene_trees.size() > 0)
+			scene_trees.at(scene_trees.size() - 1)->serialize();
+		break;
 	}
-		
 }
 
 /**
@@ -368,10 +383,11 @@ int main() {
 	glUseProgram(shader_programme);
 	
 	glm::vec3 terrain_colour = glm::vec3(0.42);
+	glClearColor(0.851f, 1.0f, 0.988f, 1.0f);
 
 	while (!glfwWindowShouldClose(window)) {
 
-		glClearColor(0.851f, 1.0f, 0.988f, 1.0f);
+		
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		view_matrix = glm::rotate(camera_pitch, glm::vec3(1,0,0)) * glm::rotate(camera_yaw, glm::vec3(0,1,0)) * translate(glm::mat4(1), camera_position);
@@ -399,17 +415,16 @@ int main() {
 			terrain_points.size() / 3
 		);
 
-		for (int i = 0; i < scene_buildings.size(); i++)
+		for (auto i = 0; i < scene_buildings.size(); i++)
 			scene_buildings[i].draw();
 
-		for (int i = 0; i < scene_trees.size(); i++)
-			scene_trees[i].draw();
+		for (auto i = 0; i < scene_trees.size(); i++)
+			scene_trees[i]->draw();
 
 		// update other events like input handling 
 		glfwPollEvents();
 		// put the stuff we've been drawing onto the display
 		glfwSwapBuffers(window);
-
 	}
 	
 	cleanUp();

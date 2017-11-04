@@ -2,6 +2,12 @@
 
 #include "stdafx.h"
 
+#include <vector>
+#include "..\glew\glew.h"	// include GL Extension Wrangler
+#include "glm.hpp"
+
+#include "stdafx.h"
+
 #include "..\glew\glew.h"	// include GL Extension Wrangler
 #include "..\glfw\glfw3.h"	// include GLFW helper library
 
@@ -9,6 +15,7 @@
 #include "transform.hpp"
 #include "gtc/matrix_transform.hpp"
 #include "gtc/type_ptr.hpp"
+#include "gtx/rotate_vector.hpp"
 
 #include <stdio.h>
 #include <stdlib.h>

@@ -1,5 +1,6 @@
 #include "Building.h"
 #define M_PI 3.14159265358979323846264338327950288
+const GLint BUILDING_DRAWING_MODE = GL_TRIANGLES;
 
 Building::Building()
 {
@@ -175,20 +176,10 @@ Building::Building(GLuint programme_id)
 	int depth = rand() % 20 + 10;
 
 	for (int x = 0; x < width; x++)
-	{
 		for (int z = 0; z < depth; z++)
-		{
 			for (int y = 0; y < height; y++)
-			{
-
 				if (x == 0 || y == 0 || z == 0 || x == width - 1 || y == height - 1 || z == depth - 1)
-				{
 					addPointToVBO(glm::vec3(x, y, z));
-				}
-
-			}
-		}
-	}
 
 	glGenBuffers(1, &front_vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, front_vbo);
@@ -262,35 +253,35 @@ void Building::draw()
 
 	glBindBuffer(GL_ARRAY_BUFFER, front_vbo);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	glDrawArrays(GL_TRIANGLES, 0, front_vertices.size());
+	glDrawArrays(BUILDING_DRAWING_MODE, 0, front_vertices.size());
 
 	glUniform3f(norm_vec3_id, 0.0f, 0.0f, 1.0f);
 
 	glBindBuffer(GL_ARRAY_BUFFER, back_vbo);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	glDrawArrays(GL_TRIANGLES, 0, back_vertices.size());
+	glDrawArrays(BUILDING_DRAWING_MODE, 0, back_vertices.size());
 
 	glUniform3f(norm_vec3_id, -1.0f, 0.0f, 0.0f);
 
 	glBindBuffer(GL_ARRAY_BUFFER, left_vbo);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	glDrawArrays(GL_TRIANGLES, 0, left_vertices.size());
+	glDrawArrays(BUILDING_DRAWING_MODE, 0, left_vertices.size());
 
 	glUniform3f(norm_vec3_id, 1.0f, 0.0f, 1.0f);
 
 	glBindBuffer(GL_ARRAY_BUFFER, right_vbo);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	glDrawArrays(GL_TRIANGLES, 0, right_vertices.size());
+	glDrawArrays(BUILDING_DRAWING_MODE, 0, right_vertices.size());
 
 	glUniform3f(norm_vec3_id, 0.0f, 1.0f, -1.0f);
 
 	glBindBuffer(GL_ARRAY_BUFFER, top_vbo);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	glDrawArrays(GL_TRIANGLES, 0, top_vertices.size());
+	glDrawArrays(BUILDING_DRAWING_MODE, 0, top_vertices.size());
 
 	glUniform3f(norm_vec3_id, 0.0f, -1.0f, 1.0f);
 
 	glBindBuffer(GL_ARRAY_BUFFER, bottom_vbo);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	glDrawArrays(GL_TRIANGLES, 0, bottom_vertices.size());
+	glDrawArrays(BUILDING_DRAWING_MODE, 0, bottom_vertices.size());
 }
