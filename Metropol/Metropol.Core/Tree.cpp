@@ -17,29 +17,9 @@ Tree::Tree(GLuint programme_id)
 
 	recursivelyGenerate(100 / 5, startingPoint, startingOrientation, 0);
 
-	glGenBuffers(1, &front_vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, front_vbo);
-	glBufferData(GL_ARRAY_BUFFER, front_vertices.size() * sizeof(GLfloat), &front_vertices.front(), GL_STATIC_DRAW);
-
-	glGenBuffers(1, &back_vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, back_vbo);
-	glBufferData(GL_ARRAY_BUFFER, back_vertices.size() * sizeof(GLfloat), &back_vertices.front(), GL_STATIC_DRAW);
-
-	glGenBuffers(1, &left_vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, left_vbo);
-	glBufferData(GL_ARRAY_BUFFER, left_vertices.size() * sizeof(GLfloat), &left_vertices.front(), GL_STATIC_DRAW);
-
-	glGenBuffers(1, &right_vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, right_vbo);
-	glBufferData(GL_ARRAY_BUFFER, right_vertices.size() * sizeof(GLfloat), &right_vertices.front(), GL_STATIC_DRAW);
-
-	glGenBuffers(1, &top_vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, top_vbo);
-	glBufferData(GL_ARRAY_BUFFER, top_vertices.size() * sizeof(GLfloat), &top_vertices.front(), GL_STATIC_DRAW);
-
-	glGenBuffers(1, &bottom_vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, bottom_vbo);
-	glBufferData(GL_ARRAY_BUFFER, bottom_vertices.size() * sizeof(GLfloat), &bottom_vertices.front(), GL_STATIC_DRAW);
+	glGenBuffers(1, &vertices_vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, vertices_vbo);
+	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), &vertices.front(), GL_STATIC_DRAW);
 
 	model_matrix_id = glGetUniformLocation(programme_id, "model_matrix");
 	vox_colour_vec3_id = glGetUniformLocation(programme_id, "voxel_Colour");
@@ -76,8 +56,7 @@ Tree::Tree(GLuint programme_id)
 
 Tree::~Tree()
 {
-	GLuint buffers[] = { left_vbo, right_vbo, top_vbo, bottom_vbo, front_vbo, back_vbo };
-	glDeleteBuffers(6, buffers);
+	glDeleteBuffers(1, &vertices_vbo);
 }
 
 void Tree::insertVoxel(glm::vec3 centre) {
@@ -88,161 +67,163 @@ void Tree::insertVoxel(glm::vec3 centre) {
 	centre.y = static_cast<int>(centre.y);
 	centre.z = static_cast<int>(centre.z);
 
+	//@TODO: Code smell!
+
 	//front
 
-	front_vertices.push_back(centre.x - TREE_VOXEL_RADIUS); //a
-	front_vertices.push_back(centre.y - TREE_VOXEL_RADIUS);
-	front_vertices.push_back(centre.z - TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.x - TREE_VOXEL_RADIUS); //a
+	vertices.push_back(centre.y - TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.z - TREE_VOXEL_RADIUS);
 
-	front_vertices.push_back(centre.x + TREE_VOXEL_RADIUS); //b
-	front_vertices.push_back(centre.y - TREE_VOXEL_RADIUS);
-	front_vertices.push_back(centre.z - TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.x + TREE_VOXEL_RADIUS); //b
+	vertices.push_back(centre.y - TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.z - TREE_VOXEL_RADIUS);
 
-	front_vertices.push_back(centre.x + TREE_VOXEL_RADIUS); //c
-	front_vertices.push_back(centre.y + TREE_VOXEL_RADIUS);
-	front_vertices.push_back(centre.z - TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.x + TREE_VOXEL_RADIUS); //c
+	vertices.push_back(centre.y + TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.z - TREE_VOXEL_RADIUS);
 
-	front_vertices.push_back(centre.x + TREE_VOXEL_RADIUS); //c
-	front_vertices.push_back(centre.y + TREE_VOXEL_RADIUS);
-	front_vertices.push_back(centre.z - TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.x + TREE_VOXEL_RADIUS); //c
+	vertices.push_back(centre.y + TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.z - TREE_VOXEL_RADIUS);
 
-	front_vertices.push_back(centre.x - TREE_VOXEL_RADIUS); //d
-	front_vertices.push_back(centre.y + TREE_VOXEL_RADIUS);
-	front_vertices.push_back(centre.z - TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.x - TREE_VOXEL_RADIUS); //d
+	vertices.push_back(centre.y + TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.z - TREE_VOXEL_RADIUS);
 
-	front_vertices.push_back(centre.x - TREE_VOXEL_RADIUS); //a
-	front_vertices.push_back(centre.y - TREE_VOXEL_RADIUS);
-	front_vertices.push_back(centre.z - TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.x - TREE_VOXEL_RADIUS); //a
+	vertices.push_back(centre.y - TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.z - TREE_VOXEL_RADIUS);
 
 	//back
 
-	back_vertices.push_back(centre.x - TREE_VOXEL_RADIUS); //a
-	back_vertices.push_back(centre.y - TREE_VOXEL_RADIUS);
-	back_vertices.push_back(centre.z + TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.x - TREE_VOXEL_RADIUS); //a
+	vertices.push_back(centre.y - TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.z + TREE_VOXEL_RADIUS);
 
-	back_vertices.push_back(centre.x + TREE_VOXEL_RADIUS); //b
-	back_vertices.push_back(centre.y - TREE_VOXEL_RADIUS);
-	back_vertices.push_back(centre.z + TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.x + TREE_VOXEL_RADIUS); //b
+	vertices.push_back(centre.y - TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.z + TREE_VOXEL_RADIUS);
 
-	back_vertices.push_back(centre.x + TREE_VOXEL_RADIUS); //c
-	back_vertices.push_back(centre.y + TREE_VOXEL_RADIUS);
-	back_vertices.push_back(centre.z + TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.x + TREE_VOXEL_RADIUS); //c
+	vertices.push_back(centre.y + TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.z + TREE_VOXEL_RADIUS);
 
-	back_vertices.push_back(centre.x + TREE_VOXEL_RADIUS); //c
-	back_vertices.push_back(centre.y + TREE_VOXEL_RADIUS);
-	back_vertices.push_back(centre.z + TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.x + TREE_VOXEL_RADIUS); //c
+	vertices.push_back(centre.y + TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.z + TREE_VOXEL_RADIUS);
 
-	back_vertices.push_back(centre.x - TREE_VOXEL_RADIUS); //d
-	back_vertices.push_back(centre.y + TREE_VOXEL_RADIUS);
-	back_vertices.push_back(centre.z + TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.x - TREE_VOXEL_RADIUS); //d
+	vertices.push_back(centre.y + TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.z + TREE_VOXEL_RADIUS);
 
-	back_vertices.push_back(centre.x - TREE_VOXEL_RADIUS); //a
-	back_vertices.push_back(centre.y - TREE_VOXEL_RADIUS);
-	back_vertices.push_back(centre.z + TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.x - TREE_VOXEL_RADIUS); //a
+	vertices.push_back(centre.y - TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.z + TREE_VOXEL_RADIUS);
 
 	//left
 
-	left_vertices.push_back(centre.x - TREE_VOXEL_RADIUS); //a
-	left_vertices.push_back(centre.y - TREE_VOXEL_RADIUS);
-	left_vertices.push_back(centre.z + TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.x - TREE_VOXEL_RADIUS); //a
+	vertices.push_back(centre.y - TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.z + TREE_VOXEL_RADIUS);
 
-	left_vertices.push_back(centre.x - TREE_VOXEL_RADIUS); //b
-	left_vertices.push_back(centre.y - TREE_VOXEL_RADIUS);
-	left_vertices.push_back(centre.z - TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.x - TREE_VOXEL_RADIUS); //b
+	vertices.push_back(centre.y - TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.z - TREE_VOXEL_RADIUS);
 
-	left_vertices.push_back(centre.x - TREE_VOXEL_RADIUS); //c
-	left_vertices.push_back(centre.y + TREE_VOXEL_RADIUS);
-	left_vertices.push_back(centre.z - TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.x - TREE_VOXEL_RADIUS); //c
+	vertices.push_back(centre.y + TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.z - TREE_VOXEL_RADIUS);
 
-	left_vertices.push_back(centre.x - TREE_VOXEL_RADIUS); //c
-	left_vertices.push_back(centre.y + TREE_VOXEL_RADIUS);
-	left_vertices.push_back(centre.z - TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.x - TREE_VOXEL_RADIUS); //c
+	vertices.push_back(centre.y + TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.z - TREE_VOXEL_RADIUS);
 
-	left_vertices.push_back(centre.x - TREE_VOXEL_RADIUS); //d
-	left_vertices.push_back(centre.y + TREE_VOXEL_RADIUS);
-	left_vertices.push_back(centre.z + TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.x - TREE_VOXEL_RADIUS); //d
+	vertices.push_back(centre.y + TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.z + TREE_VOXEL_RADIUS);
 
-	left_vertices.push_back(centre.x - TREE_VOXEL_RADIUS); //a
-	left_vertices.push_back(centre.y - TREE_VOXEL_RADIUS);
-	left_vertices.push_back(centre.z + TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.x - TREE_VOXEL_RADIUS); //a
+	vertices.push_back(centre.y - TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.z + TREE_VOXEL_RADIUS);
 
 	//right
 
-	right_vertices.push_back(centre.x + TREE_VOXEL_RADIUS); //a
-	right_vertices.push_back(centre.y - TREE_VOXEL_RADIUS);
-	right_vertices.push_back(centre.z + TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.x + TREE_VOXEL_RADIUS); //a
+	vertices.push_back(centre.y - TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.z + TREE_VOXEL_RADIUS);
 
-	right_vertices.push_back(centre.x + TREE_VOXEL_RADIUS); //b
-	right_vertices.push_back(centre.y - TREE_VOXEL_RADIUS);
-	right_vertices.push_back(centre.z - TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.x + TREE_VOXEL_RADIUS); //b
+	vertices.push_back(centre.y - TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.z - TREE_VOXEL_RADIUS);
 
-	right_vertices.push_back(centre.x + TREE_VOXEL_RADIUS); //c
-	right_vertices.push_back(centre.y + TREE_VOXEL_RADIUS);
-	right_vertices.push_back(centre.z - TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.x + TREE_VOXEL_RADIUS); //c
+	vertices.push_back(centre.y + TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.z - TREE_VOXEL_RADIUS);
 
-	right_vertices.push_back(centre.x + TREE_VOXEL_RADIUS); //c
-	right_vertices.push_back(centre.y + TREE_VOXEL_RADIUS);
-	right_vertices.push_back(centre.z - TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.x + TREE_VOXEL_RADIUS); //c
+	vertices.push_back(centre.y + TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.z - TREE_VOXEL_RADIUS);
 
-	right_vertices.push_back(centre.x + TREE_VOXEL_RADIUS); //d
-	right_vertices.push_back(centre.y + TREE_VOXEL_RADIUS);
-	right_vertices.push_back(centre.z + TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.x + TREE_VOXEL_RADIUS); //d
+	vertices.push_back(centre.y + TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.z + TREE_VOXEL_RADIUS);
 
-	right_vertices.push_back(centre.x + TREE_VOXEL_RADIUS); //a
-	right_vertices.push_back(centre.y - TREE_VOXEL_RADIUS);
-	right_vertices.push_back(centre.z + TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.x + TREE_VOXEL_RADIUS); //a
+	vertices.push_back(centre.y - TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.z + TREE_VOXEL_RADIUS);
 
 	//top
 
-	top_vertices.push_back(centre.x - TREE_VOXEL_RADIUS); //a
-	top_vertices.push_back(centre.y + TREE_VOXEL_RADIUS);
-	top_vertices.push_back(centre.z - TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.x - TREE_VOXEL_RADIUS); //a
+	vertices.push_back(centre.y + TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.z - TREE_VOXEL_RADIUS);
 
-	top_vertices.push_back(centre.x + TREE_VOXEL_RADIUS); //b
-	top_vertices.push_back(centre.y + TREE_VOXEL_RADIUS);
-	top_vertices.push_back(centre.z - TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.x + TREE_VOXEL_RADIUS); //b
+	vertices.push_back(centre.y + TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.z - TREE_VOXEL_RADIUS);
 
-	top_vertices.push_back(centre.x + TREE_VOXEL_RADIUS); //c
-	top_vertices.push_back(centre.y + TREE_VOXEL_RADIUS);
-	top_vertices.push_back(centre.z + TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.x + TREE_VOXEL_RADIUS); //c
+	vertices.push_back(centre.y + TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.z + TREE_VOXEL_RADIUS);
 
-	top_vertices.push_back(centre.x + TREE_VOXEL_RADIUS); //c
-	top_vertices.push_back(centre.y + TREE_VOXEL_RADIUS);
-	top_vertices.push_back(centre.z + TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.x + TREE_VOXEL_RADIUS); //c
+	vertices.push_back(centre.y + TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.z + TREE_VOXEL_RADIUS);
 
-	top_vertices.push_back(centre.x - TREE_VOXEL_RADIUS); //d
-	top_vertices.push_back(centre.y + TREE_VOXEL_RADIUS);
-	top_vertices.push_back(centre.z + TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.x - TREE_VOXEL_RADIUS); //d
+	vertices.push_back(centre.y + TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.z + TREE_VOXEL_RADIUS);
 
-	top_vertices.push_back(centre.x - TREE_VOXEL_RADIUS); //a
-	top_vertices.push_back(centre.y + TREE_VOXEL_RADIUS);
-	top_vertices.push_back(centre.z - TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.x - TREE_VOXEL_RADIUS); //a
+	vertices.push_back(centre.y + TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.z - TREE_VOXEL_RADIUS);
 
 	//bottom
 
-	bottom_vertices.push_back(centre.x - TREE_VOXEL_RADIUS); //a
-	bottom_vertices.push_back(centre.y - TREE_VOXEL_RADIUS);
-	bottom_vertices.push_back(centre.z - TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.x - TREE_VOXEL_RADIUS); //a
+	vertices.push_back(centre.y - TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.z - TREE_VOXEL_RADIUS);
 
-	bottom_vertices.push_back(centre.x + TREE_VOXEL_RADIUS); //b
-	bottom_vertices.push_back(centre.y - TREE_VOXEL_RADIUS);
-	bottom_vertices.push_back(centre.z - TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.x + TREE_VOXEL_RADIUS); //b
+	vertices.push_back(centre.y - TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.z - TREE_VOXEL_RADIUS);
 
-	bottom_vertices.push_back(centre.x + TREE_VOXEL_RADIUS); //c
-	bottom_vertices.push_back(centre.y - TREE_VOXEL_RADIUS);
-	bottom_vertices.push_back(centre.z + TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.x + TREE_VOXEL_RADIUS); //c
+	vertices.push_back(centre.y - TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.z + TREE_VOXEL_RADIUS);
 
-	bottom_vertices.push_back(centre.x + TREE_VOXEL_RADIUS); //c
-	bottom_vertices.push_back(centre.y - TREE_VOXEL_RADIUS);
-	bottom_vertices.push_back(centre.z + TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.x + TREE_VOXEL_RADIUS); //c
+	vertices.push_back(centre.y - TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.z + TREE_VOXEL_RADIUS);
 
-	bottom_vertices.push_back(centre.x - TREE_VOXEL_RADIUS); //d
-	bottom_vertices.push_back(centre.y - TREE_VOXEL_RADIUS);
-	bottom_vertices.push_back(centre.z + TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.x - TREE_VOXEL_RADIUS); //d
+	vertices.push_back(centre.y - TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.z + TREE_VOXEL_RADIUS);
 
-	bottom_vertices.push_back(centre.x - TREE_VOXEL_RADIUS); //a
-	bottom_vertices.push_back(centre.y - TREE_VOXEL_RADIUS);
-	bottom_vertices.push_back(centre.z - TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.x - TREE_VOXEL_RADIUS); //a
+	vertices.push_back(centre.y - TREE_VOXEL_RADIUS);
+	vertices.push_back(centre.z - TREE_VOXEL_RADIUS);
 }
 
 void Tree::fillPointsBetween2Points(glm::vec3 p1, glm::vec3 p2) {
@@ -293,39 +274,12 @@ void Tree::draw()
 
 	glUniform3f(norm_vec3_id, 0.0f, 0.0f, -1.0f);
 
-	glBindBuffer(GL_ARRAY_BUFFER, front_vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, vertices_vbo);
+
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	glDrawArrays(TREE_DRAWING_MODE, 0, front_vertices.size());
+	glDrawArrays(TREE_DRAWING_MODE, 0, vertices.size());
 
-	glUniform3f(norm_vec3_id, 0.0f, 0.0f, 1.0f);
-
-	glBindBuffer(GL_ARRAY_BUFFER, back_vbo);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	glDrawArrays(TREE_DRAWING_MODE, 0, back_vertices.size());
-
-	glUniform3f(norm_vec3_id, -1.0f, 0.0f, 0.0f);
-
-	glBindBuffer(GL_ARRAY_BUFFER, left_vbo);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	glDrawArrays(TREE_DRAWING_MODE, 0, left_vertices.size());
-
-	glUniform3f(norm_vec3_id, 1.0f, 0.0f, 1.0f);
-
-	glBindBuffer(GL_ARRAY_BUFFER, right_vbo);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	glDrawArrays(TREE_DRAWING_MODE, 0, right_vertices.size());
-
-	glUniform3f(norm_vec3_id, 0.0f, 1.0f, 0.0f);
-
-	glBindBuffer(GL_ARRAY_BUFFER, top_vbo);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	glDrawArrays(TREE_DRAWING_MODE, 0, top_vertices.size());
-
-	glUniform3f(norm_vec3_id, 0.0f, -1.0f, 0.0f);
-
-	glBindBuffer(GL_ARRAY_BUFFER, bottom_vbo);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	glDrawArrays(TREE_DRAWING_MODE, 0, bottom_vertices.size());
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 void Tree::serialize()
@@ -334,61 +288,16 @@ void Tree::serialize()
 
 	/* Vertices. */
 
-	for (int i = 0; i < front_vertices.size(); i += 3)
-		obj_file += "v " + std::to_string(front_vertices.at(i)) + " " + std::to_string(front_vertices.at(i + 1)) + " " + std::to_string(front_vertices.at(i + 2)) + "\n";
-
-	for (int i = 0; i < back_vertices.size(); i += 3)
-		obj_file += "v " + std::to_string(back_vertices.at(i)) + " " + std::to_string(back_vertices.at(i + 1)) + " " + std::to_string(back_vertices.at(i + 2)) + "\n";
-
-	for (int i = 0; i < left_vertices.size(); i += 3)
-		obj_file += "v " + std::to_string(left_vertices.at(i)) + " " + std::to_string(left_vertices.at(i + 1)) + " " + std::to_string(left_vertices.at(i + 2)) + "\n";
-
-	for (int i = 0; i < right_vertices.size(); i += 3)
-		obj_file += "v " + std::to_string(right_vertices.at(i)) + " " + std::to_string(right_vertices.at(i + 1)) + " " + std::to_string(right_vertices.at(i + 2)) + "\n";
-
-	for (int i = 0; i < top_vertices.size(); i += 3)
-		obj_file += "v " + std::to_string(top_vertices.at(i)) + " " + std::to_string(top_vertices.at(i + 1)) + " " + std::to_string(top_vertices.at(i + 2)) + "\n";
-
-	for (int i = 0; i < bottom_vertices.size(); i += 3)
-		obj_file += "v " + std::to_string(bottom_vertices.at(i)) + " " + std::to_string(bottom_vertices.at(i + 1)) + " " + std::to_string(bottom_vertices.at(i + 2)) + "\n";
+	for (int i = 0; i < vertices.size(); i += 3)
+		obj_file += "v " + std::to_string(vertices.at(i)) + " " + std::to_string(vertices.at(i + 1)) + " " + std::to_string(vertices.at(i + 2)) + "\n";
 
 	/* Faces. */
 
 	int j = 1;
 
-	for (int i = 0; i < front_vertices.size() / 9; i++)
+	for (int i = 0; i < vertices.size() / 9; i++)
 	{
 		obj_file += "f " + std::to_string(j) + "//2 " + std::to_string(j + 1) + "//2 " + std::to_string(j + 2) + "//2\n";
-		j += 3;
-	}
-
-	for (int i = 0; i < front_vertices.size() / 9; i++)
-	{
-		obj_file += "f " + std::to_string(j) + "//1 " + std::to_string(j + 1) + "//1 " + std::to_string(j + 2) + "//1\n";
-		j += 3;
-	}
-
-	for (int i = 0; i < front_vertices.size() / 9; i++)
-	{
-		obj_file += "f " + std::to_string(j) + "//6 " + std::to_string(j + 1) + "//6 " + std::to_string(j + 2) + "//6\n";
-		j += 3;
-	}
-
-	for (int i = 0; i < front_vertices.size() / 9; i++)
-	{
-		obj_file += "f " + std::to_string(j) + "//5 " + std::to_string(j + 1) + "//5 " + std::to_string(j + 2) + "//5\n";
-		j += 3;
-	}
-
-	for (int i = 0; i < front_vertices.size() / 9; i++)
-	{
-		obj_file += "f " + std::to_string(j) + "//4 " + std::to_string(j + 1) + "//4 " + std::to_string(j + 2) + "//4\n";
-		j += 3;
-	}
-
-	for (int i = 0; i < front_vertices.size() / 9; i++)
-	{
-		obj_file += "f " + std::to_string(j) + "//3 " + std::to_string(j + 1) + "//3 " + std::to_string(j + 2) + "//3\n";
 		j += 3;
 	}
 

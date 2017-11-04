@@ -34,7 +34,7 @@ public:
 private:
 	glm::vec3 color;
 	GLuint vox_colour_vec3_id, norm_vec3_id;
-	vector<GLfloat> left_vertices, right_vertices, top_vertices, bottom_vertices, front_vertices, back_vertices;
-	GLuint left_vbo, right_vbo, top_vbo, bottom_vbo, front_vbo, back_vbo;
+	vector<GLfloat> vertices;
+	GLuint vertices_vbo;
 	GLuint model_matrix_id;
 };
